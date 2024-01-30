@@ -26,10 +26,11 @@ import com.example.moviecollection.data.response.MovieResultsItem
 
 @Composable
 fun CompMovieCard(
+    modifier: Modifier = Modifier,
     movie: MovieResultsItem
 ) {
     Card(
-        modifier = Modifier.padding(8.dp)
+        modifier = modifier.padding(8.dp)
     ) {
         Column {
             val posterImage = "${Const.POSTER_URL}${movie.posterPath}"

@@ -1,9 +1,11 @@
 package com.example.moviecollection.data.remote
 
+import com.example.moviecollection.data.response.DetailMovieResponse
 import com.example.moviecollection.data.response.ListGenreResponse
 import com.example.moviecollection.data.response.ListMovieByGenreResponse
 import retrofit2.Response
 import retrofit2.http.GET
+import retrofit2.http.Path
 import retrofit2.http.Query
 
 interface ApiService {
@@ -14,4 +16,9 @@ interface ApiService {
     suspend fun getListMovieByGenre(
         @Query("with_genres") genre: Int
     ): Response<ListMovieByGenreResponse>
+
+    @GET("movie/{movie_id}")
+    suspend fun getDetailMovie(
+        @Path("movie_id") id: Int
+    ): Response<DetailMovieResponse>
 }
