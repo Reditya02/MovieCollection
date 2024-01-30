@@ -1,6 +1,7 @@
 package com.example.moviecollection.ui.listmovie
 
 import android.util.Log
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.grid.GridCells
@@ -22,20 +23,20 @@ import com.google.gson.Gson
 fun ListMovieScreen(
     viewModel: ListMovieViewModel = hiltViewModel(),
     data: String,
+    onClick: (Int) -> Unit
 ) {
     val arguments = Gson().fromJson(data, Genres::class.java)
+
     viewModel.getListMovieByGenre(arguments.id)
+    val state = viewModel.state.collectAsState().value
 
-    viewModel.state.collectAsState().value.let {
-        if (it is UIState.Success)
-            ListMovieContent(data = it.data)
-
-    }
+    ListMovieContent(data = state.result, onClick = { onClick(it) })
 }
 
 @Composable
 fun ListMovieContent(
-    data: List<MovieResultsItem>
+    data: List<MovieResultsItem>,
+    onClick: (Int) -> Unit
 ) {
     Scaffold {
         LazyVerticalGrid(
@@ -43,7 +44,10 @@ fun ListMovieContent(
             columns = GridCells.Fixed(2),
             content = {
                 items(data, key = { it.id }) {
-                    CompMovieCard(it)
+                    CompMovieCard(
+                        modifier = Modifier.clickable { onClick(it.id) },
+                        movie = it
+                    )
                 }
             }
         )

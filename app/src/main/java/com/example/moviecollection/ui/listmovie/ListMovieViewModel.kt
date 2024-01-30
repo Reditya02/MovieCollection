@@ -10,6 +10,7 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.flow.filter
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -18,17 +19,18 @@ import javax.inject.Inject
 class ListMovieViewModel @Inject constructor(
     private val getListMovieByGenreUseCase: GetListMovieByGenreUseCase
 ) : ViewModel() {
-    private val _state = MutableStateFlow<UIState<List<MovieResultsItem>>>(UIState.Loading)
-    val state: StateFlow<UIState<List<MovieResultsItem>>> = _state
+    private val _state = MutableStateFlow(ListMovieState())
+    val state: StateFlow<ListMovieState> = _state
 
     fun getListMovieByGenre(genre: Int) = viewModelScope.launch {
-        getListMovieByGenreUseCase(genre).collectLatest { uiState ->
-            if (uiState is UIState.Success) {
-                Log.d("Reditya", "response viewModel ${uiState.data.results}")
-                _state.update { UIState.Success(uiState.data.results) }
+        _state.update { it.copy(isLoading = true) }
+        getListMovieByGenreUseCase(genre).filter { it != UIState.Loading }.collectLatest { uiState ->
+            when(uiState) {
+                UIState.Empty -> _state.update { it.copy(errorMessage = "No data found") }
+                is UIState.Error -> _state.update { it.copy(errorMessage = uiState.message) }
+                UIState.Loading -> TODO()
+                is UIState.Success -> _state.update { it.copy(result = uiState.data.results) }
             }
-            else
-                _state.update { uiState as UIState<List<MovieResultsItem>> }
         }
     }
 }

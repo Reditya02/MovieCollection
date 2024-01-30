@@ -25,19 +25,14 @@ fun HomeScreen(
     viewModel: HomeViewModel = hiltViewModel(),
     navigateToListMovie: (String) -> Unit
 ) {
-    Surface(
-        modifier = Modifier.fillMaxSize(),
-        color = MaterialTheme.colorScheme.background
-    ) {
-        val state = viewModel.state.collectAsState().value
+    val state = viewModel.state.collectAsState().value
 
-        HomeContent(
-            data = state.result,
-            isLoading = state.isLoading,
-            errorMessage = state.errorMessage,
-            navigateToListMovie = { navigateToListMovie(it) }
-        )
-    }
+    HomeContent(
+        data = state.result,
+        isLoading = state.isLoading,
+        errorMessage = state.errorMessage,
+        navigateToListMovie = { navigateToListMovie(it) }
+    )
 }
 
 @Composable
