@@ -1,5 +1,6 @@
 package com.example.moviecollection.ui.home
 
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -20,6 +21,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 @Composable
 fun HomeScreen(
     viewModel: HomeViewModel = hiltViewModel(),
+    navigateToListMovie: (String) -> Unit
 ) {
     Surface(
         modifier = Modifier.fillMaxSize(),
@@ -30,7 +32,8 @@ fun HomeScreen(
         HomeContent(
             data = state.result,
             isLoading = state.isLoading,
-            errorMessage = state.errorMessage
+            errorMessage = state.errorMessage,
+            navigateToListMovie = { navigateToListMovie(it) }
         )
     }
 }
@@ -39,7 +42,9 @@ fun HomeScreen(
 fun HomeContent(
     data: List<String>,
     isLoading: Boolean,
-    errorMessage: String
+    errorMessage: String,
+    navigateToListMovie: (String) -> Unit
+
 ) {
     Scaffold {
         LazyColumn(
@@ -50,6 +55,7 @@ fun HomeContent(
                         modifier = Modifier
                             .padding(8.dp)
                             .fillMaxWidth()
+                            .clickable { navigateToListMovie(it) }
                     ) {
                         Text(
                             modifier = Modifier
