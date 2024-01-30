@@ -30,11 +30,6 @@ fun HomeScreen() {
 }
 
 @Composable
-fun testcomp() {
-
-}
-
-@Composable
 fun HomeContent() {
     Scaffold {
         LazyVerticalGrid(
