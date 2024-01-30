@@ -1,7 +1,9 @@
 package com.example.moviecollection.data.datasources
 
+import android.util.Log
 import com.example.moviecollection.data.remote.ApiService
 import com.example.moviecollection.data.response.ListGenreResponse
+import com.example.moviecollection.data.response.ListMovieByGenreResponse
 import com.example.moviecollection.domain.state.UIState
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
@@ -28,5 +30,21 @@ class RemoteDataSources @Inject constructor(
         }
     }.catch {
         emit(UIState.Error("Cannot Connect to Internet"))
+    }.flowOn(Dispatchers.IO)
+
+    fun getListMovieByGenre(genre: Int): Flow<UIState<ListMovieByGenreResponse>> = flow {
+        emit(UIState.Loading)
+        val response = apiService.getListMovieByGenre(genre)
+        val body = response.body()
+        if (response.isSuccessful && body != null) {
+            if (body.results.isNotEmpty())
+                emit(UIState.Success(body))
+            else
+                emit(UIState.Empty)
+        } else {
+            emit(UIState.Error(response.message()))
+        }
+    }.catch {
+        emit(UIState.Error(it.message ?: "empty error"))
     }.flowOn(Dispatchers.IO)
 }

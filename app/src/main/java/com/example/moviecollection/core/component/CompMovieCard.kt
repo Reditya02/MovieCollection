@@ -10,49 +10,51 @@ import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import coil.compose.rememberAsyncImagePainter
+import coil.request.ImageRequest
+import coil.size.Size
 import com.example.moviecollection.R
+import com.example.moviecollection.core.helper.Const
 import com.example.moviecollection.core.theme.MovieCollectionTheme
+import com.example.moviecollection.data.response.MovieResultsItem
 
 @Composable
 fun CompMovieCard(
-    text: String
+    movie: MovieResultsItem
 ) {
     Card(
         modifier = Modifier.padding(8.dp)
     ) {
         Column {
+            val posterImage = "${Const.POSTER_URL}${movie.posterPath}"
 
-//            val painter = rememberAsyncImagePainter(
-//                model = ImageRequest.Builder(LocalContext.current)
-//                    .data(posterImage)
-//                    .size(Size.ORIGINAL)
-//                    .build()
-//            )
+            val painter = rememberAsyncImagePainter(
+                model = ImageRequest.Builder(LocalContext.current)
+                    .data(posterImage)
+                    .size(Size.ORIGINAL)
+                    .build()
+            )
 
             Image(
                 modifier = Modifier
                     .fillMaxWidth()
                     .aspectRatio(1f),
-                painter = painterResource(id = R.drawable.ic_launcher_background),
-                contentDescription = ""
+                painter = painter,
+                contentDescription = "",
+                contentScale = ContentScale.Crop
             )
             Text(
                 modifier = Modifier.padding(8.dp),
-                text = text
+                text = movie.title + "\n",
+                maxLines = 2,
+                overflow = TextOverflow.Ellipsis
             )
-        }
-    }
-}
-
-@Preview
-@Composable
-fun CompMovieCardPreview() {
-    MovieCollectionTheme {
-        Surface {
-            CompMovieCard("test")
         }
     }
 }
