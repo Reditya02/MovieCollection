@@ -22,8 +22,9 @@ class DetailMovieViewModel @Inject constructor(
     val state: StateFlow<DetailMovieState> = _state
 
     fun getDetailMovie(id: Int) = viewModelScope.launch {
-        _state.update { it.copy(isLoading = false) }
+        _state.update { it.copy(isLoading = true) }
         getDetailMovieUseCase(id).filter { it != UIState.Loading }.collectLatest { uiState ->
+            _state.update { it.copy(isLoading = false) }
             when(uiState) {
                 UIState.Empty -> _state.update { it.copy(errorMessage = "No data found") }
                 is UIState.Error -> _state.update { it.copy(errorMessage = uiState.message) }

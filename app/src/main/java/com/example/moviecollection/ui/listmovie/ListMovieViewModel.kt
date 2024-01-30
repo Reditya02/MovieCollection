@@ -25,6 +25,7 @@ class ListMovieViewModel @Inject constructor(
     fun getListMovieByGenre(genre: Int) = viewModelScope.launch {
         _state.update { it.copy(isLoading = true) }
         getListMovieByGenreUseCase(genre).filter { it != UIState.Loading }.collectLatest { uiState ->
+            _state.update { it.copy(isLoading = false) }
             when(uiState) {
                 UIState.Empty -> _state.update { it.copy(errorMessage = "No data found") }
                 is UIState.Error -> _state.update { it.copy(errorMessage = uiState.message) }
