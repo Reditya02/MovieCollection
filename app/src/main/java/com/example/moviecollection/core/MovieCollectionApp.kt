@@ -30,9 +30,9 @@ fun MovieCollectionApp(
         
         composable(
             route = Screen.ListMovie.route,
-            arguments = listOf(navArgument("id") { type = NavType.StringType })
+            arguments = listOf(navArgument("data") { type = NavType.StringType })
         ) {
-            ListMovieScreen(id = it.arguments?.getString("id") ?: "")
+            ListMovieScreen(data = it.arguments?.getString("data") ?: "")
         }
     }
 }

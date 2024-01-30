@@ -26,7 +26,7 @@ class HomeViewModel @Inject constructor(
         getListGenre()
     }
 
-    fun getListGenre() = viewModelScope.launch {
+    private fun getListGenre() = viewModelScope.launch {
         _state.update { it.copy(isLoading = true) }
         getListGenreUseCase().filter { it != UIState.Loading }.collectLatest { uiState ->
             _state.update { it.copy(isLoading = false) }
@@ -34,7 +34,7 @@ class HomeViewModel @Inject constructor(
                 UIState.Empty -> _state.update { it.copy(errorMessage = "No data found") }
                 is UIState.Error -> _state.update { it.copy(errorMessage = uiState.message) }
                 UIState.Loading -> TODO()
-                is UIState.Success -> _state.update { it.copy(result = DataMapper.listGenreMapper(uiState.data)) }
+                is UIState.Success -> _state.update { it.copy(result = uiState.data.genres) }
             }
         }
     }

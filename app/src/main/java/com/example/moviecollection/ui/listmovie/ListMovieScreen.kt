@@ -5,7 +5,7 @@ import androidx.compose.runtime.Composable
 
 @Composable
 fun ListMovieScreen(
-    id: String
+    data: String
 ) {
-    Text(text = id)
+    Text(text = data)
 }

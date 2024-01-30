@@ -17,6 +17,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
+import com.example.moviecollection.data.response.Genres
+import com.google.gson.Gson
 
 @Composable
 fun HomeScreen(
@@ -40,7 +42,7 @@ fun HomeScreen(
 
 @Composable
 fun HomeContent(
-    data: List<String>,
+    data: List<Genres>,
     isLoading: Boolean,
     errorMessage: String,
     navigateToListMovie: (String) -> Unit
@@ -50,19 +52,19 @@ fun HomeContent(
         LazyColumn(
             modifier = Modifier.padding(it),
             content = {
-                items(data) {
+                items(data, key = { it.id }) {
                     Card(
                         modifier = Modifier
                             .padding(8.dp)
                             .fillMaxWidth()
-                            .clickable { navigateToListMovie(it) }
+                            .clickable { navigateToListMovie(Gson().toJson(it)) }
                     ) {
                         Text(
                             modifier = Modifier
                                 .padding(8.dp)
                                 .fillMaxWidth(),
                             textAlign = TextAlign.Center,
-                            text = it
+                            text = it.name
                         )
                     }
                 }
@@ -70,5 +72,3 @@ fun HomeContent(
         )
     }
 }
-
-val dummyList = listOf("a", "b", "c")
