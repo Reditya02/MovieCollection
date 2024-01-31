@@ -9,6 +9,7 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -20,8 +21,10 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.viewinterop.AndroidView
 import androidx.hilt.navigation.compose.hiltViewModel
 import coil.compose.AsyncImage
+import com.example.moviecollection.core.component.CompReviewCard
 import com.example.moviecollection.core.helper.Const
 import com.example.moviecollection.data.response.DetailMovieResponse
+import com.example.moviecollection.data.response.MovieReviewResultsItem
 import com.example.moviecollection.data.response.MovieVideoResultsItem
 import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.YouTubePlayer
 import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.listeners.AbstractYouTubePlayerListener
@@ -35,17 +38,20 @@ fun DetailMovieScreen(
     viewModel.getDetailMovie(id)
     val state = viewModel.state.collectAsState().value
     val videoState = viewModel.videoState.collectAsState().value
+    val reviewState = viewModel.reviewState.collectAsState().value
 
     DetailMovieContent(
         movie = state.result,
-        video = videoState.result
+        video = videoState.result,
+        listReview = reviewState.result
     )
 }
 
 @Composable
 fun DetailMovieContent(
     movie: DetailMovieResponse,
-    video: MovieVideoResultsItem
+    video: MovieVideoResultsItem,
+    listReview: List<MovieReviewResultsItem>
 ) {
     LazyColumn(
         modifier = Modifier.padding(12.dp)
@@ -78,6 +84,10 @@ fun DetailMovieContent(
         item { if (video.key.isNotEmpty()) {
             DetailMovieVideo(video = video)
         } }
+
+        items(listReview, key = { it.id }) {
+            CompReviewCard(review = it)
+        }
     }
 }
 

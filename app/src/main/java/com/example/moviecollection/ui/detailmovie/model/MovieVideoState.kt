@@ -1,4 +1,4 @@
-package com.example.moviecollection.ui.detailmovie
+package com.example.moviecollection.ui.detailmovie.model
 
 import com.example.moviecollection.data.response.MovieVideoResultsItem
 

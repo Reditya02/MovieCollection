@@ -3,6 +3,7 @@ package com.example.moviecollection.data.repository
 import com.example.moviecollection.data.datasources.RemoteDataSources
 import com.example.moviecollection.data.response.DetailMovieResponse
 import com.example.moviecollection.data.response.ListMovieByGenreResponse
+import com.example.moviecollection.data.response.MovieReviewResponse
 import com.example.moviecollection.data.response.MovieVideoResponse
 import com.example.moviecollection.domain.repository.IRepository
 import com.example.moviecollection.domain.state.UIState
@@ -16,4 +17,5 @@ class RepositoryImpl @Inject constructor(
     override fun getListMovieByGenre(genre: Int) = dataSources.getListMovieByGenre(genre)
     override fun getDetailMovie(id: Int) = dataSources.getDetailMovie(id)
     override fun getMovieVideo(id: Int) = dataSources.getMovieVideo(id)
+    override fun getMovieReview(id: Int) = dataSources.getMovieReview(id)
 }
