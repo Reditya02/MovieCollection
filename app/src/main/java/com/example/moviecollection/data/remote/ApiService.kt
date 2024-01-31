@@ -3,6 +3,7 @@ package com.example.moviecollection.data.remote
 import com.example.moviecollection.data.response.DetailMovieResponse
 import com.example.moviecollection.data.response.ListGenreResponse
 import com.example.moviecollection.data.response.ListMovieByGenreResponse
+import com.example.moviecollection.data.response.MovieVideoResponse
 import retrofit2.Response
 import retrofit2.http.GET
 import retrofit2.http.Path
@@ -21,4 +22,9 @@ interface ApiService {
     suspend fun getDetailMovie(
         @Path("movie_id") id: Int
     ): Response<DetailMovieResponse>
+
+    @GET("movie/{movie_id}/videos")
+    suspend fun getMovieVideo(
+        @Path("movie_id") id: Int
+    ): Response<MovieVideoResponse>
 }

@@ -9,6 +9,7 @@ import androidx.compose.material3.Card
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
@@ -16,6 +17,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import coil.compose.AsyncImage
 import coil.compose.rememberAsyncImagePainter
 import coil.request.ImageRequest
 import coil.size.Size
@@ -35,18 +37,11 @@ fun CompMovieCard(
         Column {
             val posterImage = "${Const.POSTER_URL}${movie.posterPath}"
 
-            val painter = rememberAsyncImagePainter(
-                model = ImageRequest.Builder(LocalContext.current)
-                    .data(posterImage)
-                    .size(Size.ORIGINAL)
-                    .build()
-            )
-
-            Image(
+            AsyncImage(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .aspectRatio(1f),
-                painter = painter,
+                    .aspectRatio(0.67f),
+                model = posterImage,
                 contentDescription = "",
                 contentScale = ContentScale.Crop
             )
