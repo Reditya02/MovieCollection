@@ -16,8 +16,9 @@ interface ApiService {
 
     @GET("discover/movie")
     suspend fun getListMovieByGenre(
-        @Query("with_genres") genre: Int
-    ): Response<ListMovieByGenreResponse>
+        @Query("with_genres") genre: Int,
+        @Query("page") page: Int
+    ): ListMovieByGenreResponse
 
     @GET("movie/{movie_id}")
     suspend fun getDetailMovie(
