@@ -1,6 +1,9 @@
 plugins {
     id("com.android.application")
     id("org.jetbrains.kotlin.android")
+    id("kotlin-kapt")
+    id("com.google.dagger.hilt.android")
+    id("kotlin-parcelize")
 }
 
 android {
@@ -61,8 +64,32 @@ dependencies {
     implementation("androidx.compose.material3:material3")
 
     //Coil
-    implementation ("io.coil-kt:coil-compose:2.2.2")
-    implementation ("com.github.skydoves:landscapist-coil:1.5.2")
+    implementation("io.coil-kt:coil-compose:2.2.2")
+    implementation("com.github.skydoves:landscapist-coil:1.5.2")
+
+    //Lottie
+    implementation("com.airbnb.android:lottie-compose:5.2.0")
+
+    //Dagger-Hilt
+    implementation("com.google.dagger:hilt-android:2.44")
+    kapt("com.google.dagger:hilt-android-compiler:2.44")
+    implementation("androidx.hilt:hilt-navigation-compose:1.0.0")
+    implementation("androidx.navigation:navigation-compose:2.5.3")
+
+    //Retrofit
+    implementation("com.squareup.retrofit2:retrofit:2.9.0")
+    implementation("com.squareup.retrofit2:converter-gson:2.9.0")
+    implementation("com.squareup.okhttp3:logging-interceptor:4.9.0")
+
+    //Coroutines
+    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.3.8")
+    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.3.8")
+
+    //ViewModel Lifecycle
+    implementation("androidx.lifecycle:lifecycle-viewmodel-ktx:$2.4.0")
+
+    //Navigation
+    implementation("androidx.navigation:navigation-compose:2.6.0")
 
     testImplementation("junit:junit:4.13.2")
     androidTestImplementation("androidx.test.ext:junit:1.1.5")
