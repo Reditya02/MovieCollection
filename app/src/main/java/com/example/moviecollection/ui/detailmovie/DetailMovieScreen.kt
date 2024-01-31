@@ -107,11 +107,11 @@ fun DetailMovieVideo(
 ) {
     AndroidView(factory = {
         val view = YouTubePlayerView(it)
-        val fragment = view.addYouTubePlayerListener(
+        view.addYouTubePlayerListener(
             object : AbstractYouTubePlayerListener() {
                 override fun onReady(youTubePlayer: YouTubePlayer) {
                     super.onReady(youTubePlayer)
-                    youTubePlayer.loadVideo(video.key, 0f)
+                    youTubePlayer.cueVideo(video.key, 0f)
                 }
             }
         )
