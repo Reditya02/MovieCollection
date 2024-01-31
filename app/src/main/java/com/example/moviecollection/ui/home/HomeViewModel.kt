@@ -1,12 +1,11 @@
 package com.example.moviecollection.ui.home
 
-import androidx.compose.runtime.collectAsState
 import androidx.lifecycle.ViewModel
 import com.example.moviecollection.domain.state.UIState
 import androidx.lifecycle.viewModelScope
-import com.example.moviecollection.core.helper.DataMapper
 import com.example.moviecollection.domain.usecase.GetListGenreUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.collectLatest

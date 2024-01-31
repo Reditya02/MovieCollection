@@ -17,6 +17,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
+import com.example.moviecollection.core.component.CompErrorMessage
+import com.example.moviecollection.core.component.CompLoading
 import com.example.moviecollection.data.response.Genres
 import com.google.gson.Gson
 
@@ -27,21 +29,21 @@ fun HomeScreen(
 ) {
     val state = viewModel.state.collectAsState().value
 
-    HomeContent(
-        data = state.result,
-        isLoading = state.isLoading,
-        errorMessage = state.errorMessage,
-        navigateToListMovie = { navigateToListMovie(it) }
-    )
+    if (state.isLoading)
+        CompLoading()
+    else if (state.errorMessage.isNotEmpty())
+        CompErrorMessage(message = state.errorMessage)
+    else
+        HomeContent(
+            data = state.result,
+            navigateToListMovie = { navigateToListMovie(it) }
+        )
 }
 
 @Composable
 fun HomeContent(
     data: List<Genres>,
-    isLoading: Boolean,
-    errorMessage: String,
     navigateToListMovie: (String) -> Unit
-
 ) {
     Scaffold {
         LazyColumn(
