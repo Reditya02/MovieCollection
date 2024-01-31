@@ -1,9 +1,7 @@
 package com.example.moviecollection.ui.listmovie
 
-import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.moviecollection.data.response.MovieResultsItem
 import com.example.moviecollection.domain.state.UIState
 import com.example.moviecollection.domain.usecase.GetListMovieByGenreUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
