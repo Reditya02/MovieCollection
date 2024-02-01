@@ -4,12 +4,10 @@ import androidx.paging.LoadType
 import androidx.paging.PagingState
 import androidx.paging.RemoteMediator
 import com.example.moviecollection.core.helper.Handler
-import com.example.moviecollection.data.datasources.LocalDataSources
 import com.example.moviecollection.data.datasources.RemoteDataSources
 import com.example.moviecollection.data.local.AppDatabase
 import com.example.moviecollection.domain.model.MovieModel
 import com.example.moviecollection.domain.model.RemoteKeys
-import java.net.UnknownHostException
 
 class MovieRemoteMediator(
     private val remoteDataSources: RemoteDataSources,

@@ -1,6 +1,5 @@
 package com.example.moviecollection.data.pagingsources
 
-import android.util.Log
 import androidx.paging.PagingSource
 import androidx.paging.PagingState
 import com.example.moviecollection.data.datasources.RemoteDataSources

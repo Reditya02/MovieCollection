@@ -5,11 +5,8 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.Card
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
@@ -17,7 +14,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
-import androidx.paging.PagingData
 import androidx.paging.compose.LazyPagingItems
 import androidx.paging.compose.collectAsLazyPagingItems
 import com.example.moviecollection.core.component.CompErrorMessage
@@ -50,23 +46,23 @@ fun HomeContent(
     data: LazyPagingItems<Genres>,
     navigateToListMovie: (String) -> Unit
 ) {
-    Scaffold {
+    Scaffold { paddingValues ->
         LazyColumn(
-            modifier = Modifier.padding(it),
+            modifier = Modifier.padding(paddingValues),
             content = {
-                items(data.itemCount, key = { data[it]!!.id }) {
+                items(data.itemCount, key = { index -> data[index]!!.id }) { index ->
                     Card(
                         modifier = Modifier
                             .padding(8.dp)
                             .fillMaxWidth()
-                            .clickable { navigateToListMovie(Gson().toJson(data[it])) }
+                            .clickable { navigateToListMovie(Gson().toJson(data[index])) }
                     ) {
                         Text(
                             modifier = Modifier
                                 .padding(8.dp)
                                 .fillMaxWidth(),
                             textAlign = TextAlign.Center,
-                            text = data[it]!!.name
+                            text = data[index]!!.name
                         )
                     }
                 }

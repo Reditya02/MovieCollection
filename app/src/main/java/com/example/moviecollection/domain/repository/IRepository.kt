@@ -3,8 +3,6 @@ package com.example.moviecollection.domain.repository
 import androidx.paging.PagingData
 import com.example.moviecollection.data.response.DetailMovieResponse
 import com.example.moviecollection.data.response.Genres
-import com.example.moviecollection.data.response.ListGenreResponse
-import com.example.moviecollection.data.response.MovieResultsItem
 import com.example.moviecollection.data.response.MovieReviewResultsItem
 import com.example.moviecollection.data.response.MovieVideoResponse
 import com.example.moviecollection.domain.model.MovieModel

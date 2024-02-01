@@ -17,7 +17,6 @@ import com.example.moviecollection.core.component.CompErrorMessage
 import com.example.moviecollection.core.component.CompLoading
 import com.example.moviecollection.core.component.CompMovieCard
 import com.example.moviecollection.data.response.Genres
-import com.example.moviecollection.data.response.MovieResultsItem
 import com.example.moviecollection.domain.model.MovieModel
 import com.google.gson.Gson
 
@@ -50,13 +49,13 @@ fun ListMovieContent(
     onClick: (Int) -> Unit,
     pagingData: LazyPagingItems<MovieModel>
 ) {
-    Scaffold {
+    Scaffold { paddingValues ->
         LazyVerticalGrid(
-            modifier = Modifier.padding(it),
+            modifier = Modifier.padding(paddingValues),
             columns = GridCells.Fixed(2),
             content = {
-                items(pagingData.itemCount) {
-                    val movie = pagingData[it]!!
+                items(pagingData.itemCount) { index ->
+                    val movie = pagingData[index]!!
                     CompMovieCard(
                         modifier = Modifier.clickable { onClick(movie.id) },
                         movie = movie

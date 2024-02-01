@@ -10,7 +10,6 @@ import com.example.moviecollection.domain.usecase.GetDetailMovieUseCase
 import com.example.moviecollection.domain.usecase.GetMovieReviewUseCase
 import com.example.moviecollection.domain.usecase.GetMovieVideoUseCase
 import com.example.moviecollection.ui.detailmovie.model.DetailMovieState
-import com.example.moviecollection.ui.detailmovie.model.MovieReviewState
 import com.example.moviecollection.ui.detailmovie.model.MovieVideoState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -63,8 +62,8 @@ class DetailMovieViewModel @Inject constructor(
                 is UIState.Error -> _videoState.update { it.copy(errorMessage = uiState.message) }
                 UIState.Loading -> TODO()
                 is UIState.Success -> _videoState.update { it.copy(
-                    result = uiState.data.results.first {
-                        it.official && it.type == "Trailer" && it.site == "YouTube"
+                    result = uiState.data.results.first { movie ->
+                        movie.official && movie.type == "Trailer" && movie.site == "YouTube"
                     }
                 ) }
             }

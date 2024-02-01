@@ -2,8 +2,6 @@ package com.example.moviecollection.ui.detailmovie.model
 
 import com.example.moviecollection.data.response.BelongsToCollection
 import com.example.moviecollection.data.response.DetailMovieResponse
-import com.example.moviecollection.data.response.Genres
-import com.example.moviecollection.data.response.MovieVideoResultsItem
 
 data class DetailMovieState(
     val isLoading: Boolean = true,

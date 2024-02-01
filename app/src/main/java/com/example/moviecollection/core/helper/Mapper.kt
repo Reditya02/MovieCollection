@@ -4,7 +4,7 @@ import com.example.moviecollection.data.response.MovieResultsItem
 import com.example.moviecollection.domain.model.MovieModel
 
 object Mapper {
-    fun MovieResultsItem.mapToMovieModel() = MovieModel(
+    private fun MovieResultsItem.mapToMovieModel() = MovieModel(
         id = id,
         overview = overview,
         originalLanguage = originalLanguage,
