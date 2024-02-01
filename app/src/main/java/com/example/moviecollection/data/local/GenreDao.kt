@@ -13,7 +13,7 @@ interface GenreDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insert(genres: List<Genres>)
 
-    @Query("select * from genre")
+    @Query("select * from genre order by name asc")
     fun getAll(): PagingSource<Int, Genres>
 
     @Query("delete from genre")

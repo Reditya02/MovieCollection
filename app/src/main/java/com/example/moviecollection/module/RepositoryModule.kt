@@ -2,6 +2,7 @@ package com.example.moviecollection.module
 
 import com.example.moviecollection.data.datasources.LocalDataSources
 import com.example.moviecollection.data.datasources.RemoteDataSources
+import com.example.moviecollection.data.local.AppDatabase
 import com.example.moviecollection.data.repository.RepositoryImpl
 import com.example.moviecollection.domain.repository.IRepository
 import dagger.Module
@@ -17,7 +18,8 @@ object RepositoryModule {
     @Singleton
     fun providesRepository(
         remoteDataSources: RemoteDataSources,
-        localDatasources: LocalDataSources
+        localDataSources: LocalDataSources,
+        database: AppDatabase
     ) : IRepository =
-        RepositoryImpl(remoteDataSources, localDatasources)
+        RepositoryImpl(remoteDataSources, localDataSources, database)
 }

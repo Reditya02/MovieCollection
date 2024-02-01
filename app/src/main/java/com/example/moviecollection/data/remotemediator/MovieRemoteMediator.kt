@@ -5,11 +5,12 @@ import androidx.paging.PagingState
 import androidx.paging.RemoteMediator
 import com.example.moviecollection.data.datasources.LocalDataSources
 import com.example.moviecollection.data.datasources.RemoteDataSources
+import com.example.moviecollection.data.local.AppDatabase
 import com.example.moviecollection.domain.model.MovieModel
 
 class MovieRemoteMediator(
     private val remoteDataSources: RemoteDataSources,
-    private val localDataSources: LocalDataSources,
+    private val database: AppDatabase,
     private val genre: Int
 ) : RemoteMediator<Int, MovieModel>() {
 
@@ -21,16 +22,17 @@ class MovieRemoteMediator(
         loadType: LoadType,
         state: PagingState<Int, MovieModel>
     ): MediatorResult {
+        val initialPage = 1
+
         return try {
-            val initialPage = 1
             val response = remoteDataSources.getListMovieByGenre(
                 genre = genre, page = initialPage
             )
             val endOfPagination = response.isEmpty()
             if (loadType == LoadType.REFRESH) {
-                localDataSources.deleteMovieByGenre(genre)
+                database.movieDao().deleteByGenre(genre)
             }
-            localDataSources.insertMovie(response)
+            database.movieDao().insert(response)
             MediatorResult.Success(endOfPagination)
         } catch (exception: Exception) {
             MediatorResult.Error(exception)

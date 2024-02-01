@@ -5,6 +5,7 @@ import androidx.paging.PagingConfig
 import androidx.paging.PagingData
 import com.example.moviecollection.data.datasources.LocalDataSources
 import com.example.moviecollection.data.datasources.RemoteDataSources
+import com.example.moviecollection.data.local.AppDatabase
 import com.example.moviecollection.data.pagingsources.MoviePagingSources
 import com.example.moviecollection.data.pagingsources.ReviewPagingSources
 import com.example.moviecollection.data.remotemediator.GenreRemoteMediator
@@ -18,19 +19,20 @@ import javax.inject.Inject
 
 class RepositoryImpl @Inject constructor(
     private val remoteDataSources: RemoteDataSources,
-    private val localDataSources: LocalDataSources
+    private val localDataSources: LocalDataSources,
+    private val database: AppDatabase
 ) : IRepository {
     override fun getListGenre(): Flow<PagingData<Genres>> =
         Pager(
             config = PagingConfig(pageSize = 20),
-            remoteMediator = GenreRemoteMediator(remoteDataSources, localDataSources),
+            remoteMediator = GenreRemoteMediator(remoteDataSources, database),
             pagingSourceFactory = { localDataSources.getListGenre() }
         ).flow
 
     override fun getListMovieByGenre(genre: Int): Flow<PagingData<MovieModel>> =
         Pager(
             config = PagingConfig(pageSize = 10, prefetchDistance = 4),
-            remoteMediator = MovieRemoteMediator(remoteDataSources, localDataSources, genre),
+            remoteMediator = MovieRemoteMediator(remoteDataSources, database, genre),
             pagingSourceFactory = { localDataSources.getMovieByGenre(genre) }
         ).flow
 

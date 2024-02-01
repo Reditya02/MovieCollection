@@ -12,7 +12,7 @@ interface MovieDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insert(movies: List<MovieModel>)
 
-    @Query("select * from movie where genreIds like :genre ")
+    @Query("select * from movie where genreIds like :genre order by popularity desc")
     fun getByGenre(genre: String): PagingSource<Int, MovieModel>
 
     @Query("delete from movie where genreIds like :genre")
