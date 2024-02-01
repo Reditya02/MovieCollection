@@ -3,7 +3,6 @@ package com.example.moviecollection.data.datasources
 import com.example.moviecollection.data.remote.ApiService
 import com.example.moviecollection.data.response.DetailMovieResponse
 import com.example.moviecollection.data.response.ListGenreResponse
-import com.example.moviecollection.data.response.MovieReviewResponse
 import com.example.moviecollection.data.response.MovieVideoResponse
 import com.example.moviecollection.domain.state.UIState
 import kotlinx.coroutines.Dispatchers
@@ -11,6 +10,7 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.flowOn
+import java.net.UnknownHostException
 import javax.inject.Inject
 
 class RemoteDataSources @Inject constructor(
@@ -29,7 +29,10 @@ class RemoteDataSources @Inject constructor(
             emit(UIState.Error(response.message()))
         }
     }.catch {
-        emit(UIState.Error(it.message ?: "empty error"))
+        when(it) {
+            is UnknownHostException -> emit(UIState.Error("No Internet"))
+            else -> emit(UIState.Error(it.message ?: "Error Appears"))
+        }
     }.flowOn(Dispatchers.IO)
 
     suspend fun getListMovieByGenre(genre: Int, page: Int) = apiService.getListMovieByGenre(genre, page)
@@ -44,7 +47,10 @@ class RemoteDataSources @Inject constructor(
             emit(UIState.Error(response.message()))
         }
     }.catch {
-        emit(UIState.Error(it.message ?: "empty error"))
+        when(it) {
+            is UnknownHostException -> emit(UIState.Error("No Internet"))
+            else -> emit(UIState.Error(it.message ?: "Error Appears"))
+        }
     }.flowOn(Dispatchers.IO)
 
     fun getMovieVideo(id: Int): Flow<UIState<MovieVideoResponse>> = flow {
@@ -60,7 +66,10 @@ class RemoteDataSources @Inject constructor(
             emit(UIState.Error(response.message()))
         }
     }.catch {
-        emit(UIState.Error(it.message ?: "empty error"))
+        when(it) {
+            is UnknownHostException -> emit(UIState.Error("No Internet"))
+            else -> emit(UIState.Error(it.message ?: "Error Appears"))
+        }
     }.flowOn(Dispatchers.IO)
 
     suspend fun getMovieReview(id: Int, page: Int) = apiService.getMovieReview(id, page)

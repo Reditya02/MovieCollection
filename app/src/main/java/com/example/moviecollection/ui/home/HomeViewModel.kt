@@ -8,6 +8,7 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.filter
 import kotlinx.coroutines.flow.update
@@ -27,14 +28,17 @@ class HomeViewModel @Inject constructor(
 
     private fun getListGenre() = viewModelScope.launch {
         _state.update { it.copy(isLoading = true) }
-        getListGenreUseCase().filter { it != UIState.Loading }.collectLatest { uiState ->
-            _state.update { it.copy(isLoading = false) }
-            when(uiState) {
-                UIState.Empty -> _state.update { it.copy(errorMessage = "No data found") }
-                is UIState.Error -> _state.update { it.copy(errorMessage = uiState.message) }
-                UIState.Loading -> TODO()
-                is UIState.Success -> _state.update { it.copy(result = uiState.data.genres) }
+        getListGenreUseCase()
+            .filter { it != UIState.Loading }
+            .collectLatest { uiState ->
+                _state.update { it.copy(isLoading = false) }
+                when(uiState) {
+                    UIState.Empty -> _state.update { it.copy(errorMessage = "No data found") }
+                    is UIState.Error -> _state.update { it.copy(errorMessage = uiState.message) }
+                    UIState.Loading -> TODO()
+                    is UIState.Success -> _state.update { it.copy(result = uiState.data.genres) }
+                }
             }
-        }
+
     }
 }

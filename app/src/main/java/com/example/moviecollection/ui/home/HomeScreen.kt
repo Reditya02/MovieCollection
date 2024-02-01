@@ -32,7 +32,7 @@ fun HomeScreen(
     if (state.isLoading)
         CompLoading()
     else if (state.errorMessage.isNotEmpty())
-        CompErrorMessage(message = state.errorMessage)
+        CompErrorMessage(modifier = Modifier.fillMaxSize(), message = state.errorMessage)
     else
         HomeContent(
             data = state.result,

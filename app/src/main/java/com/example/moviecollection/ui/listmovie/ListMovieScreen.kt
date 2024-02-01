@@ -36,7 +36,12 @@ fun ListMovieScreen(
 
     val pagingState: LazyPagingItems<MovieResultsItem> = viewModel.pagingState.collectAsLazyPagingItems()
 
-    ListMovieContent(onClick = { onClick(it) }, pagingData = pagingState)
+    if (state.isLoading)
+        CompLoading()
+    else if (state.errorMessage.isNotEmpty())
+        CompErrorMessage(message = state.errorMessage)
+    else
+        ListMovieContent(onClick = { onClick(it) }, pagingData = pagingState)
 }
 
 @Composable
@@ -49,7 +54,7 @@ fun ListMovieContent(
             modifier = Modifier.padding(it),
             columns = GridCells.Fixed(2),
             content = {
-                items(pagingData.itemCount) {
+                items(pagingData.itemCount, key = { pagingData[it]!!.id!! }) {
                     val movie = pagingData[it]!!
                     CompMovieCard(
                         modifier = Modifier.clickable { onClick(movie.id ?: 0) },

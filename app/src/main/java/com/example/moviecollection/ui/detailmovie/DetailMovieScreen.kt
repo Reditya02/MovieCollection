@@ -86,7 +86,7 @@ fun DetailMovieContent(
             DetailMovieVideo(video = video)
         } }
 
-        items(listReview.itemCount) {
+        items(listReview.itemCount, key = { listReview[it]!!.id }) {
             CompReviewCard(review = listReview[it]!!)
         }
     }
