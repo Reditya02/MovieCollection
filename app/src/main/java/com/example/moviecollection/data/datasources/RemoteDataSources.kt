@@ -63,19 +63,5 @@ class RemoteDataSources @Inject constructor(
         emit(UIState.Error(it.message ?: "empty error"))
     }.flowOn(Dispatchers.IO)
 
-    fun getMovieReview(id: Int): Flow<UIState<MovieReviewResponse>> = flow {
-        emit(UIState.Loading)
-        val response = apiService.getMovieReview(id)
-        val body = response.body()
-        if (response.isSuccessful && body != null) {
-            if (body.results.isNotEmpty())
-                emit(UIState.Success(body))
-            else
-                emit(UIState.Empty)
-        } else {
-            emit(UIState.Error(response.message()))
-        }
-    }.catch {
-        emit(UIState.Error(it.message ?: "empty error"))
-    }.flowOn(Dispatchers.IO)
+    suspend fun getMovieReview(id: Int, page: Int) = apiService.getMovieReview(id, page)
 }

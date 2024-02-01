@@ -9,7 +9,6 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -20,6 +19,8 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.viewinterop.AndroidView
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.paging.compose.LazyPagingItems
+import androidx.paging.compose.collectAsLazyPagingItems
 import coil.compose.AsyncImage
 import com.example.moviecollection.core.component.CompReviewCard
 import com.example.moviecollection.core.helper.Const
@@ -38,12 +39,12 @@ fun DetailMovieScreen(
     viewModel.getDetailMovie(id)
     val state = viewModel.state.collectAsState().value
     val videoState = viewModel.videoState.collectAsState().value
-    val reviewState = viewModel.reviewState.collectAsState().value
+    val reviewState: LazyPagingItems<MovieReviewResultsItem> = viewModel.reviewState.collectAsLazyPagingItems()
 
     DetailMovieContent(
         movie = state.result,
         video = videoState.result,
-        listReview = reviewState.result
+        listReview = reviewState
     )
 }
 
@@ -51,7 +52,7 @@ fun DetailMovieScreen(
 fun DetailMovieContent(
     movie: DetailMovieResponse,
     video: MovieVideoResultsItem,
-    listReview: List<MovieReviewResultsItem>
+    listReview: LazyPagingItems<MovieReviewResultsItem>
 ) {
     LazyColumn(
         modifier = Modifier.padding(12.dp)
@@ -85,8 +86,8 @@ fun DetailMovieContent(
             DetailMovieVideo(video = video)
         } }
 
-        items(listReview, key = { it.id }) {
-            CompReviewCard(review = it)
+        items(listReview.itemCount) {
+            CompReviewCard(review = listReview[it]!!)
         }
     }
 }

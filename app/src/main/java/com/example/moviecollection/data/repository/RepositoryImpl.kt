@@ -5,7 +5,9 @@ import androidx.paging.PagingConfig
 import androidx.paging.PagingData
 import com.example.moviecollection.data.datasources.RemoteDataSources
 import com.example.moviecollection.data.pagingsources.MoviePagingSources
+import com.example.moviecollection.data.pagingsources.ReviewPagingSources
 import com.example.moviecollection.data.response.MovieResultsItem
+import com.example.moviecollection.data.response.MovieReviewResultsItem
 import com.example.moviecollection.domain.repository.IRepository
 import kotlinx.coroutines.flow.Flow
 import javax.inject.Inject
@@ -27,5 +29,14 @@ class RepositoryImpl @Inject constructor(
     }
     override fun getDetailMovie(id: Int) = dataSources.getDetailMovie(id)
     override fun getMovieVideo(id: Int) = dataSources.getMovieVideo(id)
-    override fun getMovieReview(id: Int) = dataSources.getMovieReview(id)
+    override fun getMovieReview(id: Int): Flow<PagingData<MovieReviewResultsItem>> {
+        return Pager(
+            config = PagingConfig(
+                pageSize = 10, prefetchDistance = 5
+            ),
+            pagingSourceFactory = {
+                ReviewPagingSources(dataSources, id)
+            }
+        ).flow
+    }
 }

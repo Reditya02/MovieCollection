@@ -29,7 +29,7 @@ data class AuthorDetails(
 	val name: String,
 
 	@field:SerializedName("rating")
-	val rating: Int,
+	val rating: Double,
 
 	@field:SerializedName("username")
 	val username: String
