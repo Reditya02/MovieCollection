@@ -6,7 +6,6 @@ import androidx.paging.PagingData
 import com.example.moviecollection.data.datasources.LocalDataSources
 import com.example.moviecollection.data.datasources.RemoteDataSources
 import com.example.moviecollection.data.local.AppDatabase
-import com.example.moviecollection.data.pagingsources.MoviePagingSources
 import com.example.moviecollection.data.pagingsources.ReviewPagingSources
 import com.example.moviecollection.data.remotemediator.GenreRemoteMediator
 import com.example.moviecollection.data.remotemediator.MovieRemoteMediator
@@ -42,12 +41,8 @@ class RepositoryImpl @Inject constructor(
 
     override fun getMovieReview(id: Int): Flow<PagingData<MovieReviewResultsItem>> {
         return Pager(
-            config = PagingConfig(
-                pageSize = 10, prefetchDistance = 5
-            ),
-            pagingSourceFactory = {
-                ReviewPagingSources(remoteDataSources, id)
-            }
+            config = PagingConfig( pageSize = 10, prefetchDistance = 5 ),
+            pagingSourceFactory = { ReviewPagingSources(remoteDataSources, id) }
         ).flow
     }
 }

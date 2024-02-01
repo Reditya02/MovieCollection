@@ -12,13 +12,5 @@ class LocalDataSources @Inject constructor(
 ) {
     fun getListGenre() = genreDao.getAll()
 
-    suspend fun clearGenre() = genreDao.deleteAll()
-
-    suspend fun insertGenre(genres: List<Genres>) = genreDao.insert(genres)
-
     fun getMovieByGenre(genre: Int) = movieDao.getByGenre("%$genre%")
-
-    suspend fun deleteMovieByGenre(genre: Int) = movieDao.deleteByGenre(genre)
-
-    suspend fun insertMovie(movies: List<MovieModel>) = movieDao.insert(movies)
 }
