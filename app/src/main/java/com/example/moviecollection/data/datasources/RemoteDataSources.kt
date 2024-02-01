@@ -2,7 +2,6 @@ package com.example.moviecollection.data.datasources
 
 import com.example.moviecollection.data.remote.ApiService
 import com.example.moviecollection.data.response.DetailMovieResponse
-import com.example.moviecollection.data.response.ListGenreResponse
 import com.example.moviecollection.data.response.MovieVideoResponse
 import com.example.moviecollection.domain.state.UIState
 import kotlinx.coroutines.Dispatchers
@@ -16,24 +15,7 @@ import javax.inject.Inject
 class RemoteDataSources @Inject constructor(
     private val apiService: ApiService
 ) {
-    fun getListGenre(): Flow<UIState<ListGenreResponse>> = flow {
-        emit(UIState.Loading)
-        val response = apiService.getListGenre()
-        val body = response.body()
-        if (response.isSuccessful && body != null) {
-            if (body.genres.isNotEmpty())
-                emit(UIState.Success(body))
-            else
-                emit(UIState.Empty)
-        } else {
-            emit(UIState.Error(response.message()))
-        }
-    }.catch {
-        when(it) {
-            is UnknownHostException -> emit(UIState.Error("No Internet"))
-            else -> emit(UIState.Error(it.message ?: "Error Appears"))
-        }
-    }.flowOn(Dispatchers.IO)
+    suspend fun getListGenre() = apiService.getListGenre()
 
     suspend fun getListMovieByGenre(genre: Int, page: Int) = apiService.getListMovieByGenre(genre, page)
 

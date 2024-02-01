@@ -17,6 +17,9 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.paging.PagingData
+import androidx.paging.compose.LazyPagingItems
+import androidx.paging.compose.collectAsLazyPagingItems
 import com.example.moviecollection.core.component.CompErrorMessage
 import com.example.moviecollection.core.component.CompLoading
 import com.example.moviecollection.data.response.Genres
@@ -29,39 +32,41 @@ fun HomeScreen(
 ) {
     val state = viewModel.state.collectAsState().value
 
+    val pagerState: LazyPagingItems<Genres> = viewModel.pagerState.collectAsLazyPagingItems()
+
     if (state.isLoading)
         CompLoading()
     else if (state.errorMessage.isNotEmpty())
         CompErrorMessage(modifier = Modifier.fillMaxSize(), message = state.errorMessage)
     else
         HomeContent(
-            data = state.result,
+            data = pagerState,
             navigateToListMovie = { navigateToListMovie(it) }
         )
 }
 
 @Composable
 fun HomeContent(
-    data: List<Genres>,
+    data: LazyPagingItems<Genres>,
     navigateToListMovie: (String) -> Unit
 ) {
     Scaffold {
         LazyColumn(
             modifier = Modifier.padding(it),
             content = {
-                items(data, key = { it.id }) {
+                items(data.itemCount, key = { data[it]!!.id }) {
                     Card(
                         modifier = Modifier
                             .padding(8.dp)
                             .fillMaxWidth()
-                            .clickable { navigateToListMovie(Gson().toJson(it)) }
+                            .clickable { navigateToListMovie(Gson().toJson(data[it])) }
                     ) {
                         Text(
                             modifier = Modifier
                                 .padding(8.dp)
                                 .fillMaxWidth(),
                             textAlign = TextAlign.Center,
-                            text = it.name
+                            text = data[it]!!.name
                         )
                     }
                 }
