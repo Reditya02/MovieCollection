@@ -25,11 +25,12 @@ import com.example.moviecollection.R
 import com.example.moviecollection.core.helper.Const
 import com.example.moviecollection.core.theme.MovieCollectionTheme
 import com.example.moviecollection.data.response.MovieResultsItem
+import com.example.moviecollection.domain.model.MovieModel
 
 @Composable
 fun CompMovieCard(
     modifier: Modifier = Modifier,
-    movie: MovieResultsItem
+    movie: MovieModel
 ) {
     Card(
         modifier = modifier.padding(8.dp)
@@ -43,6 +44,7 @@ fun CompMovieCard(
                     .aspectRatio(0.67f),
                 model = posterImage,
                 contentDescription = "",
+                error = painterResource(id = R.drawable.ic_launcher_background),
                 contentScale = ContentScale.Crop
             )
             Text(

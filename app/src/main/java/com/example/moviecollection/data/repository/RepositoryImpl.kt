@@ -3,21 +3,22 @@ package com.example.moviecollection.data.repository
 import androidx.paging.Pager
 import androidx.paging.PagingConfig
 import androidx.paging.PagingData
-import com.example.moviecollection.data.datasources.LocalDatasources
+import com.example.moviecollection.data.datasources.LocalDataSources
 import com.example.moviecollection.data.datasources.RemoteDataSources
 import com.example.moviecollection.data.pagingsources.MoviePagingSources
 import com.example.moviecollection.data.pagingsources.ReviewPagingSources
 import com.example.moviecollection.data.remotemediator.GenreRemoteMediator
+import com.example.moviecollection.data.remotemediator.MovieRemoteMediator
 import com.example.moviecollection.data.response.Genres
-import com.example.moviecollection.data.response.MovieResultsItem
 import com.example.moviecollection.data.response.MovieReviewResultsItem
+import com.example.moviecollection.domain.model.MovieModel
 import com.example.moviecollection.domain.repository.IRepository
 import kotlinx.coroutines.flow.Flow
 import javax.inject.Inject
 
 class RepositoryImpl @Inject constructor(
     private val remoteDataSources: RemoteDataSources,
-    private val localDataSources: LocalDatasources
+    private val localDataSources: LocalDataSources
 ) : IRepository {
     override fun getListGenre(): Flow<PagingData<Genres>> =
         Pager(
@@ -26,17 +27,12 @@ class RepositoryImpl @Inject constructor(
             pagingSourceFactory = { localDataSources.getListGenre() }
         ).flow
 
-    override fun getListMovieByGenre(genre: Int): Flow<PagingData<MovieResultsItem>> {
-        val factory = MoviePagingSources(remoteDataSources, genre)
-        return Pager(
-            config = PagingConfig(
-                pageSize = 10, prefetchDistance = 5
-            ),
-            pagingSourceFactory = {
-                factory
-            }
+    override fun getListMovieByGenre(genre: Int): Flow<PagingData<MovieModel>> =
+        Pager(
+            config = PagingConfig(pageSize = 10, prefetchDistance = 4),
+            remoteMediator = MovieRemoteMediator(remoteDataSources, localDataSources, genre),
+            pagingSourceFactory = { localDataSources.getMovieByGenre(genre) }
         ).flow
-    }
 
     override fun getDetailMovie(id: Int) = remoteDataSources.getDetailMovie(id)
 

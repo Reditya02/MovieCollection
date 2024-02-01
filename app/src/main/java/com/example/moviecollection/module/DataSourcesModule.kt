@@ -1,8 +1,9 @@
 package com.example.moviecollection.module
 
-import com.example.moviecollection.data.datasources.LocalDatasources
+import com.example.moviecollection.data.datasources.LocalDataSources
 import com.example.moviecollection.data.datasources.RemoteDataSources
 import com.example.moviecollection.data.local.GenreDao
+import com.example.moviecollection.data.local.MovieDao
 import com.example.moviecollection.data.remote.ApiService
 import dagger.Module
 import dagger.Provides
@@ -19,6 +20,6 @@ object DataSourcesModule {
 
     @Provides
     @Singleton
-    fun providesLocalDataSources(genreDao: GenreDao) =
-        LocalDatasources(genreDao)
+    fun providesLocalDataSources(genreDao: GenreDao, movieDao: MovieDao) =
+        LocalDataSources(genreDao, movieDao)
 }

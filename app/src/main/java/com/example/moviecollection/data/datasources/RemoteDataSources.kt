@@ -1,5 +1,6 @@
 package com.example.moviecollection.data.datasources
 
+import com.example.moviecollection.core.helper.Mapper.mapToListMovieModel
 import com.example.moviecollection.data.remote.ApiService
 import com.example.moviecollection.data.response.DetailMovieResponse
 import com.example.moviecollection.data.response.MovieVideoResponse
@@ -17,7 +18,8 @@ class RemoteDataSources @Inject constructor(
 ) {
     suspend fun getListGenre() = apiService.getListGenre()
 
-    suspend fun getListMovieByGenre(genre: Int, page: Int) = apiService.getListMovieByGenre(genre, page)
+    suspend fun getListMovieByGenre(genre: Int, page: Int) =
+        apiService.getListMovieByGenre(genre, page).listResults.mapToListMovieModel()
 
     fun getDetailMovie(id: Int): Flow<UIState<DetailMovieResponse>> = flow {
         emit(UIState.Loading)

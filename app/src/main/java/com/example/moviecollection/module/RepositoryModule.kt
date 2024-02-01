@@ -1,6 +1,6 @@
 package com.example.moviecollection.module
 
-import com.example.moviecollection.data.datasources.LocalDatasources
+import com.example.moviecollection.data.datasources.LocalDataSources
 import com.example.moviecollection.data.datasources.RemoteDataSources
 import com.example.moviecollection.data.repository.RepositoryImpl
 import com.example.moviecollection.domain.repository.IRepository
@@ -17,7 +17,7 @@ object RepositoryModule {
     @Singleton
     fun providesRepository(
         remoteDataSources: RemoteDataSources,
-        localDatasources: LocalDatasources
+        localDatasources: LocalDataSources
     ) : IRepository =
         RepositoryImpl(remoteDataSources, localDatasources)
 }

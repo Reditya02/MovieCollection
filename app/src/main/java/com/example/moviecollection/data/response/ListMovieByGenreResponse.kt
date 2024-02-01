@@ -1,5 +1,7 @@
 package com.example.moviecollection.data.response
 
+import androidx.room.Entity
+import androidx.room.PrimaryKey
 import com.google.gson.annotations.SerializedName
 
 data class ListMovieByGenreResponse(
@@ -47,13 +49,14 @@ data class MovieResultsItem(
 	val releaseDate: String? = null,
 
 	@field:SerializedName("popularity")
-	val popularity: Any? = null,
+	val popularity: Double? = 0.0,
 
 	@field:SerializedName("vote_average")
 	val voteAverage: Double? = null,
 
+	@PrimaryKey
 	@field:SerializedName("id")
-	val id: Int? = null,
+	val id: Int,
 
 	@field:SerializedName("adult")
 	val adult: Boolean? = null,

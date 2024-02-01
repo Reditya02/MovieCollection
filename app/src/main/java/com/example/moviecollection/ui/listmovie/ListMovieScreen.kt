@@ -18,6 +18,7 @@ import com.example.moviecollection.core.component.CompLoading
 import com.example.moviecollection.core.component.CompMovieCard
 import com.example.moviecollection.data.response.Genres
 import com.example.moviecollection.data.response.MovieResultsItem
+import com.example.moviecollection.domain.model.MovieModel
 import com.google.gson.Gson
 
 @Composable
@@ -34,7 +35,7 @@ fun ListMovieScreen(
 
     val state = viewModel.state.collectAsState().value
 
-    val pagingState: LazyPagingItems<MovieResultsItem> = viewModel.pagingState.collectAsLazyPagingItems()
+    val pagingState: LazyPagingItems<MovieModel> = viewModel.pagingState.collectAsLazyPagingItems()
 
     if (state.isLoading)
         CompLoading()
@@ -47,17 +48,17 @@ fun ListMovieScreen(
 @Composable
 fun ListMovieContent(
     onClick: (Int) -> Unit,
-    pagingData: LazyPagingItems<MovieResultsItem>
+    pagingData: LazyPagingItems<MovieModel>
 ) {
     Scaffold {
         LazyVerticalGrid(
             modifier = Modifier.padding(it),
             columns = GridCells.Fixed(2),
             content = {
-                items(pagingData.itemCount, key = { pagingData[it]!!.id!! }) {
+                items(pagingData.itemCount) {
                     val movie = pagingData[it]!!
                     CompMovieCard(
-                        modifier = Modifier.clickable { onClick(movie.id ?: 0) },
+                        modifier = Modifier.clickable { onClick(movie.id) },
                         movie = movie
                     )
                 }

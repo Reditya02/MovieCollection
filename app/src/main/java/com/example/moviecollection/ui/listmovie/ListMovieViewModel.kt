@@ -5,6 +5,7 @@ import androidx.lifecycle.viewModelScope
 import androidx.paging.PagingData
 import androidx.paging.cachedIn
 import com.example.moviecollection.data.response.MovieResultsItem
+import com.example.moviecollection.domain.model.MovieModel
 import com.example.moviecollection.domain.usecase.GetListMovieByGenreUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.delay
@@ -23,8 +24,8 @@ class ListMovieViewModel @Inject constructor(
     private val _state = MutableStateFlow(ListMovieState())
     val state: StateFlow<ListMovieState> = _state
 
-    private val _pagingState = MutableStateFlow<PagingData<MovieResultsItem>>(PagingData.empty())
-    val pagingState: StateFlow<PagingData<MovieResultsItem>> = _pagingState
+    private val _pagingState = MutableStateFlow<PagingData<MovieModel>>(PagingData.empty())
+    val pagingState: StateFlow<PagingData<MovieModel>> = _pagingState
 
     fun getListMovieByGenre(genre: Int) = viewModelScope.launch {
         _state.update { it.copy(isLoading = true) }

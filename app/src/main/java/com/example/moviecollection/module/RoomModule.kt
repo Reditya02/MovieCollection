@@ -26,4 +26,8 @@ object RoomModule {
     @Provides
     @Singleton
     fun providesGenreDao(appDatabase: AppDatabase) = appDatabase.genreDao()
+
+    @Provides
+    @Singleton
+    fun providesMovieDao(appDatabase: AppDatabase) = appDatabase.movieDao()
 }

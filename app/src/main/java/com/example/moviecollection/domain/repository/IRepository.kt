@@ -7,13 +7,14 @@ import com.example.moviecollection.data.response.ListGenreResponse
 import com.example.moviecollection.data.response.MovieResultsItem
 import com.example.moviecollection.data.response.MovieReviewResultsItem
 import com.example.moviecollection.data.response.MovieVideoResponse
+import com.example.moviecollection.domain.model.MovieModel
 import com.example.moviecollection.domain.state.UIState
 import kotlinx.coroutines.flow.Flow
 
 interface IRepository {
     fun getListGenre(): Flow<PagingData<Genres>>
 
-    fun getListMovieByGenre(genre: Int): Flow<PagingData<MovieResultsItem>>
+    fun getListMovieByGenre(genre: Int): Flow<PagingData<MovieModel>>
 
     fun getDetailMovie(id: Int): Flow<UIState<DetailMovieResponse>>
 
