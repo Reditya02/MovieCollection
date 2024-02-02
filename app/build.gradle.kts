@@ -39,7 +39,9 @@ android {
     }
     kotlinOptions {
         jvmTarget = "11"
-        freeCompilerArgs = freeCompilerArgs + "-opt-in=androidx.paging.ExperimentalPagingApi"
+        freeCompilerArgs = freeCompilerArgs +
+                "-opt-in=androidx.paging.ExperimentalPagingApi" +
+                "-opt-in=androidx.compose.material3.ExperimentalMaterial3Api"
     }
     buildFeatures {
         compose = true

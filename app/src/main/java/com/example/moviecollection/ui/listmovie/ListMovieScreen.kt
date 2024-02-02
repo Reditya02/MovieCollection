@@ -1,10 +1,13 @@
 package com.example.moviecollection.ui.listmovie
 
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
+import androidx.compose.material3.CenterAlignedTopAppBar
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
@@ -33,15 +36,20 @@ fun ListMovieScreen(
     }
 
     val state = viewModel.state.collectAsState().value
-
     val pagingState: LazyPagingItems<MovieModel> = viewModel.pagingState.collectAsLazyPagingItems()
 
-    if (state.isLoading)
-        CompLoading()
-    else if (state.errorMessage.isNotEmpty())
-        CompErrorMessage(message = state.errorMessage)
-    else
-        ListMovieContent(onClick = { onClick(it) }, pagingData = pagingState)
+    Scaffold(
+        topBar = { CenterAlignedTopAppBar(title = { Text(text = arguments.name) }) }
+    ) {
+        Box(modifier = Modifier.padding(it)) {
+            if (state.isLoading)
+                CompLoading()
+            else if (state.errorMessage.isNotEmpty())
+                CompErrorMessage(message = state.errorMessage)
+            else
+                ListMovieContent(onClick = { onClick(it) }, pagingData = pagingState)
+        }
+    }
 }
 
 @Composable
@@ -49,45 +57,42 @@ fun ListMovieContent(
     onClick: (Int) -> Unit,
     pagingData: LazyPagingItems<MovieModel>
 ) {
-    Scaffold { paddingValues ->
-        LazyVerticalGrid(
-            modifier = Modifier.padding(paddingValues),
-            columns = GridCells.Fixed(2),
-            content = {
-                items(pagingData.itemCount) { index ->
-                    val movie = pagingData[index]!!
-                    CompMovieCard(
-                        modifier = Modifier.clickable { onClick(movie.id) },
-                        movie = movie
-                    )
-                }
-                pagingData.apply {
-                    when {
-                        loadState.refresh is LoadState.Loading -> {
-                            item { CompLoading() }
-                        }
-
-                        loadState.refresh is LoadState.Error -> {
-                            val error = pagingData.loadState.refresh as LoadState.Error
-                            item {
-                                CompErrorMessage(message = error.error.localizedMessage ?: "Empty error")
-                            }
-                        }
-
-                        loadState.append is LoadState.Loading -> {
-                            item { CompLoading() }
-                        }
-
-                        loadState.append is LoadState.Error -> {
-                            val error = pagingData.loadState.refresh as LoadState.Error
-                            item {
-                                CompErrorMessage(message = error.error.localizedMessage ?: "Empty error")
-                            }
-                        }
-
+    LazyVerticalGrid(
+        columns = GridCells.Fixed(2),
+        content = {
+            items(pagingData.itemCount) { index ->
+                val movie = pagingData[index]!!
+                CompMovieCard(
+                    modifier = Modifier.clickable { onClick(movie.id) },
+                    movie = movie
+                )
+            }
+            pagingData.apply {
+                when {
+                    loadState.refresh is LoadState.Loading -> {
+                        item { CompLoading() }
                     }
+
+                    loadState.refresh is LoadState.Error -> {
+                        val error = pagingData.loadState.refresh as LoadState.Error
+                        item {
+                            CompErrorMessage(message = error.error.localizedMessage ?: "Empty error")
+                        }
+                    }
+
+                    loadState.append is LoadState.Loading -> {
+                        item { CompLoading() }
+                    }
+
+                    loadState.append is LoadState.Error -> {
+                        val error = pagingData.loadState.refresh as LoadState.Error
+                        item {
+                            CompErrorMessage(message = error.error.localizedMessage ?: "Empty error")
+                        }
+                    }
+
                 }
-            },
-        )
-    }
+            }
+        },
+    )
 }

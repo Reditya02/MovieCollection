@@ -1,5 +1,6 @@
 package com.example.moviecollection.ui.detailmovie
 
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -9,7 +10,9 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.material3.CenterAlignedTopAppBar
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -41,23 +44,28 @@ fun DetailMovieScreen(
 ) {
     LaunchedEffect(Unit) {
         viewModel.getDetailMovie(id)
-
     }
 
     val state = viewModel.state.collectAsState().value
     val videoState = viewModel.videoState.collectAsState().value
     val reviewState: LazyPagingItems<MovieReviewResultsItem> = viewModel.reviewState.collectAsLazyPagingItems()
 
-    if (state.isLoading)
-        CompLoading()
-    else if (state.errorMessage.isNotEmpty())
-        CompErrorMessage(message = state.errorMessage)
-    else {
-        DetailMovieContent(
-            movie = state.result,
-            video = videoState.result,
-            listReview = reviewState
-        )
+    Scaffold(
+        topBar = { CenterAlignedTopAppBar(title = { Text(text = "Detail Movie") }) }
+    ) {
+        Box(modifier = Modifier.padding(it)) {
+            if (state.isLoading)
+                CompLoading()
+            else if (state.errorMessage.isNotEmpty())
+                CompErrorMessage(message = state.errorMessage)
+            else {
+                DetailMovieContent(
+                    movie = state.result,
+                    video = videoState.result,
+                    listReview = reviewState
+                )
+            }
+        }
     }
 }
 
