@@ -11,7 +11,7 @@ import retrofit2.http.Path
 import retrofit2.http.Query
 
 interface ApiService {
-    @GET("genre/movie/list?language=en")
+    @GET("genre/movie/list")
     suspend fun getListGenre(): ListGenreResponse
 
     @GET("discover/movie")

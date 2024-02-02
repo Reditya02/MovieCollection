@@ -22,6 +22,8 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.paging.compose.LazyPagingItems
 import androidx.paging.compose.collectAsLazyPagingItems
 import coil.compose.AsyncImage
+import com.example.moviecollection.core.component.CompErrorMessage
+import com.example.moviecollection.core.component.CompLoading
 import com.example.moviecollection.core.component.CompReviewCard
 import com.example.moviecollection.core.helper.Const
 import com.example.moviecollection.data.response.DetailMovieResponse
@@ -41,11 +43,17 @@ fun DetailMovieScreen(
     val videoState = viewModel.videoState.collectAsState().value
     val reviewState: LazyPagingItems<MovieReviewResultsItem> = viewModel.reviewState.collectAsLazyPagingItems()
 
-    DetailMovieContent(
-        movie = state.result,
-        video = videoState.result,
-        listReview = reviewState
-    )
+    if (state.isLoading)
+        CompLoading()
+    else if (state.errorMessage.isNotEmpty())
+        CompErrorMessage(message = state.errorMessage)
+    else {
+        DetailMovieContent(
+            movie = state.result,
+            video = videoState.result,
+            listReview = reviewState
+        )
+    }
 }
 
 @Composable
@@ -84,6 +92,8 @@ fun DetailMovieContent(
         item { Spacer(modifier = Modifier.height(8.dp)) }
         item { if (video.key.isNotEmpty()) {
             DetailMovieVideo(video = video)
+        } else {
+            CompErrorMessage(message = "Cannot load trailer")
         } }
 
         items(listReview.itemCount, key = { listReview[it]!!.id }) {

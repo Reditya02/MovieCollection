@@ -1,5 +1,6 @@
 package com.example.moviecollection.data.datasources
 
+import com.example.moviecollection.core.helper.Handler
 import com.example.moviecollection.core.helper.Mapper.mapToListMovieModel
 import com.example.moviecollection.data.remote.ApiService
 import com.example.moviecollection.data.response.DetailMovieResponse
@@ -31,10 +32,7 @@ class RemoteDataSources @Inject constructor(
             emit(UIState.Error(response.message()))
         }
     }.catch {
-        when(it) {
-            is UnknownHostException -> emit(UIState.Error("No Internet"))
-            else -> emit(UIState.Error(it.message ?: "Error Appears"))
-        }
+        emit(Handler.retrofitExceptionHandler(it))
     }.flowOn(Dispatchers.IO)
 
     fun getMovieVideo(id: Int): Flow<UIState<MovieVideoResponse>> = flow {
@@ -50,10 +48,7 @@ class RemoteDataSources @Inject constructor(
             emit(UIState.Error(response.message()))
         }
     }.catch {
-        when(it) {
-            is UnknownHostException -> emit(UIState.Error("No Internet"))
-            else -> emit(UIState.Error(it.message ?: "Error Appears"))
-        }
+        emit(Handler.retrofitExceptionHandler(it))
     }.flowOn(Dispatchers.IO)
 
     suspend fun getMovieReview(id: Int, page: Int) = apiService.getMovieReview(id, page)

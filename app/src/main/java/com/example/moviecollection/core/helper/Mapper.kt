@@ -19,7 +19,6 @@ object Mapper {
         voteAverage = voteAverage,
         adult = adult,
         voteCount = voteCount
-
     )
 
     fun List<MovieResultsItem>.mapToListMovieModel() = map {
