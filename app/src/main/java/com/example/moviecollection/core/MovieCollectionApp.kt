@@ -34,6 +34,7 @@ fun MovieCollectionApp(
         ) {
             ListMovieScreen(
                 data = it.arguments?.getString("data") ?: "",
+                onBackPressed = { navController.popBackStack() },
                 onClick = {
                     navController.navigate(Screen.DetailMovie.createRoute(it))
                 }
@@ -44,7 +45,10 @@ fun MovieCollectionApp(
             route = Screen.DetailMovie.route,
             arguments = listOf(navArgument("id") { type = NavType.IntType })
         ) {
-            DetailMovieScreen(id = it.arguments?.getInt("id") ?: 0)
+            DetailMovieScreen(
+                onBackPressed = { navController.popBackStack() },
+                id = it.arguments?.getInt("id") ?: 0
+            )
         }
     }
 }

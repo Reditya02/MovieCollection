@@ -11,7 +11,11 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material3.CenterAlignedTopAppBar
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
@@ -47,6 +51,7 @@ import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.views.YouTube
 @Composable
 fun DetailMovieScreen(
     viewModel: DetailMovieViewModel = hiltViewModel(),
+    onBackPressed: () -> Unit,
     id: Int
 ) {
     LaunchedEffect(Unit) {
@@ -58,7 +63,14 @@ fun DetailMovieScreen(
     val reviewState: LazyPagingItems<MovieReviewResultsItem> = viewModel.reviewState.collectAsLazyPagingItems()
 
     Scaffold(
-        topBar = { CenterAlignedTopAppBar(title = { Text(text = "Detail Movie") }) }
+        topBar = { CenterAlignedTopAppBar(
+            title = { Text(text = state.result.title) },
+            navigationIcon = {
+                IconButton(onClick = onBackPressed) {
+                    Icon(imageVector = Icons.Default.ArrowBack, contentDescription = "")
+                }
+            }
+        ) }
     ) {
         Box(modifier = Modifier.padding(it)) {
             if (state.isLoading)
