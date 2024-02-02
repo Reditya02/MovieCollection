@@ -24,6 +24,7 @@ import com.example.moviecollection.data.response.MovieReviewResultsItem
 
 @Composable
 fun CompReviewCard(
+    modifier: Modifier,
     review: MovieReviewResultsItem
 ) {
     var textLayoutResult by remember { mutableStateOf<TextLayoutResult?>(null) }
@@ -32,7 +33,7 @@ fun CompReviewCard(
     val isButtonShown by remember { derivedStateOf { isExpandable || isExpanded } }
 
     Card(
-        modifier = Modifier
+        modifier = modifier
             .padding(vertical = 4.dp)
             .animateContentSize(),
     ) {

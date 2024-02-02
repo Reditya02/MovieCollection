@@ -19,6 +19,7 @@
             android:name=".core.MainActivity"
             android:exported="true"
             android:label="@string/app_name"
+            android:hardwareAccelerated="true"
             android:theme="@style/Theme.MovieCollection">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

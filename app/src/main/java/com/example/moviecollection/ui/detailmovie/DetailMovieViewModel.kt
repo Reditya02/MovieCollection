@@ -12,6 +12,7 @@ import com.example.moviecollection.domain.usecase.GetMovieVideoUseCase
 import com.example.moviecollection.ui.detailmovie.model.DetailMovieState
 import com.example.moviecollection.ui.detailmovie.model.MovieVideoState
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.collectLatest
@@ -38,6 +39,7 @@ class DetailMovieViewModel @Inject constructor(
 
     fun getDetailMovie(id: Int) = viewModelScope.launch {
         _state.update { it.copy(isLoading = true) }
+        delay(400)
         getDetailMovieUseCase(id).filter { it != UIState.Loading }.collectLatest { uiState ->
             _state.update { it.copy(isLoading = false) }
             when(uiState) {
@@ -55,8 +57,9 @@ class DetailMovieViewModel @Inject constructor(
 
     private fun getMovieVideo(id: Int) = viewModelScope.launch {
         _videoState.update { it.copy(isLoading = true) }
+        delay(400)
         getMovieVideoUseCase(id).filter { it != UIState.Loading }.collectLatest { uiState ->
-            _state.update { it.copy(isLoading = false) }
+            _videoState.update { it.copy(isLoading = false) }
             when(uiState) {
                 UIState.Empty -> _videoState.update { it.copy(errorMessage = "No data found") }
                 is UIState.Error -> _videoState.update { it.copy(errorMessage = uiState.message) }
@@ -71,6 +74,7 @@ class DetailMovieViewModel @Inject constructor(
     }
 
     private fun getMovieReview(id: Int) = viewModelScope.launch {
+        delay(400)
         getMovieReviewUseCase(id)
             .distinctUntilChanged()
             .cachedIn(viewModelScope)

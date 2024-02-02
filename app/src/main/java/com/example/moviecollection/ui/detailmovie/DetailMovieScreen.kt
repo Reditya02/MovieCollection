@@ -1,12 +1,13 @@
 package com.example.moviecollection.ui.detailmovie
 
+import androidx.compose.animation.core.tween
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
@@ -20,12 +21,17 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.viewinterop.AndroidView
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.paging.compose.LazyPagingItems
 import androidx.paging.compose.collectAsLazyPagingItems
-import coil.compose.AsyncImage
+import coil.compose.AsyncImagePainter
+import coil.compose.rememberAsyncImagePainter
+import coil.request.ImageRequest
+import coil.size.Size
+import com.example.moviecollection.R
 import com.example.moviecollection.core.component.CompErrorMessage
 import com.example.moviecollection.core.component.CompLoading
 import com.example.moviecollection.core.component.CompReviewCard
@@ -33,6 +39,7 @@ import com.example.moviecollection.core.helper.Const
 import com.example.moviecollection.data.response.DetailMovieResponse
 import com.example.moviecollection.data.response.MovieReviewResultsItem
 import com.example.moviecollection.data.response.MovieVideoResultsItem
+import com.example.moviecollection.ui.detailmovie.model.MovieVideoState
 import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.YouTubePlayer
 import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.listeners.AbstractYouTubePlayerListener
 import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.views.YouTubePlayerView
@@ -61,7 +68,7 @@ fun DetailMovieScreen(
             else {
                 DetailMovieContent(
                     movie = state.result,
-                    video = videoState.result,
+                    video = videoState,
                     listReview = reviewState
                 )
             }
@@ -72,46 +79,78 @@ fun DetailMovieScreen(
 @Composable
 fun DetailMovieContent(
     movie: DetailMovieResponse,
-    video: MovieVideoResultsItem,
+    video: MovieVideoState,
     listReview: LazyPagingItems<MovieReviewResultsItem>
 ) {
     LazyColumn(
-        modifier = Modifier.padding(12.dp)
+        modifier = Modifier
+            .padding(12.dp)
     ) {
-        item {
-            Row {
-                val posterImage = "${Const.POSTER_URL}${movie.posterPath}"
+        item(key = "header") { DetailMovieHeader(movie = movie) }
 
-                AsyncImage(
-                    modifier = Modifier
-                        .weight(4f)
-                        .fillMaxWidth()
-                        .aspectRatio(0.67f)
-                        .clip(MaterialTheme.shapes.medium),
-                    model = posterImage,
-                    contentDescription = "",
-                    contentScale = ContentScale.Crop
-                )
-                Spacer(modifier = Modifier.width(8.dp))
-                Text(
-                    modifier = Modifier.weight(6f),
-                    text = movie.title
-                )
+        item(key = "overview") { DetailMovieOverview(movie = movie) }
+        item(key = "video") {
+            Column {
+                Text(text = "Trailer")
+                if (video.isLoading) {
+                    CompLoading(
+                        modifier = Modifier
+                            .aspectRatio(1f)
+                    )
+                } else if (video.errorMessage.isNotEmpty()) {
+                    CompErrorMessage(message = video.errorMessage)
+                } else {
+                    DetailMovieVideo(video = video.result)
+                }
             }
         }
-        item { Spacer(modifier = Modifier.height(8.dp)) }
-        item { DetailMovieOverview(movie = movie) }
 
-        item { Spacer(modifier = Modifier.height(8.dp)) }
-        item { if (video.key.isNotEmpty()) {
-            DetailMovieVideo(video = video)
-        } else {
-            CompErrorMessage(message = "Cannot load trailer")
-        } }
-
+        item(key = "review") { Text(modifier = Modifier.padding(top = 8.dp), text = "Review") }
         items(listReview.itemCount, key = { listReview[it]!!.id }) {
-            CompReviewCard(review = listReview[it]!!)
+            CompReviewCard(
+                modifier = Modifier.animateItemPlacement( tween(200) ),
+                review = listReview[it]!!
+            )
         }
+    }
+}
+
+@Composable
+fun DetailMovieHeader(
+    movie: DetailMovieResponse
+) {
+    Row {
+        val painter = rememberAsyncImagePainter(
+            ImageRequest.Builder(LocalContext.current)
+                .data("${Const.POSTER_URL}${movie.posterPath}")
+                .error(R.drawable.ic_launcher_background)
+                .size(Size.ORIGINAL)
+                .build()
+        )
+
+        if (painter.state is AsyncImagePainter.State.Loading) {
+            CompLoading(modifier = Modifier
+                .weight(4f)
+                .fillMaxWidth()
+                .aspectRatio(0.67f)
+                .clip(MaterialTheme.shapes.medium)
+            )
+        }
+        Image(
+            modifier = Modifier
+                .weight(4f)
+                .fillMaxWidth()
+                .aspectRatio(0.67f)
+                .clip(MaterialTheme.shapes.medium),
+            painter = painter,
+            contentDescription = "",
+            contentScale = ContentScale.Crop
+        )
+        Spacer(modifier = Modifier.width(8.dp))
+        Text(
+            modifier = Modifier.weight(6f),
+            text = movie.title
+        )
     }
 }
 
@@ -119,7 +158,9 @@ fun DetailMovieContent(
 fun DetailMovieOverview(
     movie: DetailMovieResponse
 ) {
-    Column {
+    Column(
+        Modifier.padding(vertical = 8.dp)
+    ) {
         Text(text = "Overview")
         Text(text = movie.overview)
     }

@@ -1,5 +1,6 @@
 package com.example.moviecollection.core.component
 
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -9,10 +10,13 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
-import coil.compose.AsyncImage
+import coil.compose.AsyncImagePainter
+import coil.compose.rememberAsyncImagePainter
+import coil.request.ImageRequest
+import coil.size.Size
 import com.example.moviecollection.R
 import com.example.moviecollection.core.helper.Const
 import com.example.moviecollection.domain.model.MovieModel
@@ -23,20 +27,30 @@ fun CompMovieCard(
     movie: MovieModel
 ) {
     Card(
-        modifier = modifier.padding(8.dp)
+        modifier = modifier
     ) {
         Column {
-            val posterImage = "${Const.POSTER_URL}${movie.posterPath}"
-
-            AsyncImage(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .aspectRatio(0.67f),
-                model = posterImage,
-                contentDescription = "",
-                error = painterResource(id = R.drawable.ic_launcher_background),
-                contentScale = ContentScale.Crop
+            val painter = rememberAsyncImagePainter(
+                ImageRequest.Builder(LocalContext.current)
+                    .data("${Const.POSTER_URL}${movie.posterPath}")
+                    .error(R.drawable.ic_launcher_background)
+                    .size(Size.ORIGINAL)
+                    .build()
             )
+
+            if (painter.state is AsyncImagePainter.State.Loading) {
+                CompLoading(modifier = Modifier.aspectRatio(0.67f))
+            } else {
+                Image(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .aspectRatio(0.67f),
+                    painter = painter,
+                    contentDescription = "",
+                    contentScale = ContentScale.Crop
+                )
+            }
+
             Text(
                 modifier = Modifier.padding(8.dp),
                 text = movie.title + "\n",

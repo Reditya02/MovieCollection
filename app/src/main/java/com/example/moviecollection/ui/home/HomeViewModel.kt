@@ -7,6 +7,7 @@ import androidx.paging.cachedIn
 import com.example.moviecollection.data.response.Genres
 import com.example.moviecollection.domain.usecase.GetListGenreUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.catch
@@ -31,6 +32,7 @@ class HomeViewModel @Inject constructor(
 
     private fun getListGenre() = viewModelScope.launch {
         _state.update { it.copy(isLoading = true) }
+        delay(400)
         getListGenreUseCase()
             .distinctUntilChanged()
             .cachedIn(viewModelScope)

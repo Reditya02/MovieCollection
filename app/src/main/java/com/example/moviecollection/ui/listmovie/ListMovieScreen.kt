@@ -6,12 +6,15 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.material3.CenterAlignedTopAppBar
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.paging.LoadState
 import androidx.paging.compose.LazyPagingItems
@@ -63,7 +66,10 @@ fun ListMovieContent(
             items(pagingData.itemCount) { index ->
                 val movie = pagingData[index]!!
                 CompMovieCard(
-                    modifier = Modifier.clickable { onClick(movie.id) },
+                    modifier = Modifier
+                        .padding(8.dp)
+                        .clip(MaterialTheme.shapes.medium)
+                        .clickable { onClick(movie.id) },
                     movie = movie
                 )
             }
