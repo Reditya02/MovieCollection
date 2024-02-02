@@ -12,6 +12,7 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -38,7 +39,11 @@ fun DetailMovieScreen(
     viewModel: DetailMovieViewModel = hiltViewModel(),
     id: Int
 ) {
-    viewModel.getDetailMovie(id)
+    LaunchedEffect(Unit) {
+        viewModel.getDetailMovie(id)
+
+    }
+
     val state = viewModel.state.collectAsState().value
     val videoState = viewModel.videoState.collectAsState().value
     val reviewState: LazyPagingItems<MovieReviewResultsItem> = viewModel.reviewState.collectAsLazyPagingItems()
