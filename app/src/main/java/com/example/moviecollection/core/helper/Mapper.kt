@@ -11,7 +11,7 @@ object Mapper {
         originalTitle = originalTitle,
         video = video,
         title = title,
-        genreIds = genreIds!!.joinToString(separator = "|"),
+        genreIds = genreIds?.joinToString(separator = "|") ?: "",
         posterPath = posterPath,
         backdropPath = backdropPath,
         popularity = popularity ?: 0.0,

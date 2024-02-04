@@ -84,14 +84,30 @@ fun ListMovieContent(
                 key = pagingData.itemKey(),
                 contentType = pagingData.itemContentType()
             ) { index ->
-                val movie = pagingData[index]!!
+                val movie = pagingData[index]
                 CompMovieCard(
                     modifier = Modifier
                         .padding(8.dp)
                         .animateItemPlacement()
                         .clip(MaterialTheme.shapes.medium)
-                        .clickable { onClick(movie.id) },
-                    movie = movie
+                        .clickable { onClick(movie?.id ?: 0) },
+                    movie = movie ?: MovieModel(
+                        id = 4307,
+                        overview = null,
+                        originalLanguage = null,
+                        originalTitle = null,
+                        video = null,
+                        title = null,
+                        genreIds = null,
+                        posterPath = null,
+                        backdropPath = null,
+                        releaseDate = null,
+                        popularity = 2.3,
+                        voteAverage = null,
+                        adult = null,
+                        voteCount = null
+
+                    )
                 )
             }
             pagingData.apply {
