@@ -1,6 +1,5 @@
 package com.example.moviecollection.ui.listmovie
 
-import androidx.compose.animation.core.tween
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.padding
@@ -26,11 +25,11 @@ import androidx.paging.compose.LazyPagingItems
 import androidx.paging.compose.collectAsLazyPagingItems
 import androidx.paging.compose.itemContentType
 import androidx.paging.compose.itemKey
+import com.example.domain.model.GenreModel
+import com.example.domain.model.MovieModel
 import com.example.moviecollection.core.component.CompErrorMessage
 import com.example.moviecollection.core.component.CompLoading
 import com.example.moviecollection.core.component.CompMovieCard
-import com.example.moviecollection.data.response.Genres
-import com.example.moviecollection.domain.model.MovieModel
 import com.google.gson.Gson
 
 @Composable
@@ -40,7 +39,7 @@ fun ListMovieScreen(
     onBackPressed: () -> Unit,
     onClick: (Int) -> Unit
 ) {
-    val arguments = Gson().fromJson(data, Genres::class.java)
+    val arguments = Gson().fromJson(data, GenreModel::class.java)
 
     LaunchedEffect(Unit) {
         viewModel.getListMovieByGenre(arguments.id)

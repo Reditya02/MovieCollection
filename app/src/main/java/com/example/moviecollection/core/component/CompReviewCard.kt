@@ -20,12 +20,12 @@ import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.text.TextLayoutResult
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
-import com.example.moviecollection.data.response.MovieReviewResultsItem
+import com.example.domain.model.MovieReviewModel
 
 @Composable
 fun CompReviewCard(
     modifier: Modifier,
-    review: MovieReviewResultsItem
+    review: MovieReviewModel
 ) {
     var textLayoutResult by remember { mutableStateOf<TextLayoutResult?>(null) }
     val isExpandable by remember { derivedStateOf { textLayoutResult?.didOverflowHeight ?: false } }
@@ -42,7 +42,7 @@ fun CompReviewCard(
         ) {
             Text(
                 modifier = Modifier.padding(horizontal = 8.dp),
-                text = review.author
+                text = review.author ?: "anonim"
             )
             Divider(
                 modifier = Modifier.padding(vertical = 4.dp),
@@ -56,7 +56,7 @@ fun CompReviewCard(
                 maxLines = if (isExpanded) Int.MAX_VALUE else 4,
                 overflow = TextOverflow.Ellipsis,
                 onTextLayout = { textLayoutResult = it },
-                text = review.content
+                text = review.content ?: ""
             )
             if (isButtonShown) {
                 TextButton(

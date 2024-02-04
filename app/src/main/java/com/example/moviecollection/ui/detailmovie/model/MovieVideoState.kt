@@ -1,11 +1,11 @@
 package com.example.moviecollection.ui.detailmovie.model
 
-import com.example.moviecollection.data.response.MovieVideoResultsItem
+import com.example.domain.model.MovieVideoModel
 
 data class MovieVideoState(
     val isLoading: Boolean = true,
     val errorMessage: String = "",
-    val result: MovieVideoResultsItem = MovieVideoResultsItem(
+    val result: MovieVideoModel = MovieVideoModel(
         site = "",
         size = 0,
         iso31661 = "",

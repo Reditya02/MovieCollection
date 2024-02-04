@@ -18,9 +18,9 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.paging.compose.LazyPagingItems
 import androidx.paging.compose.collectAsLazyPagingItems
+import com.example.domain.model.GenreModel
 import com.example.moviecollection.core.component.CompErrorMessage
 import com.example.moviecollection.core.component.CompLoading
-import com.example.moviecollection.data.response.Genres
 import com.google.gson.Gson
 
 @Composable
@@ -30,7 +30,7 @@ fun HomeScreen(
 ) {
     val state = viewModel.state.collectAsState().value
 
-    val pagerState: LazyPagingItems<Genres> = viewModel.pagerState.collectAsLazyPagingItems()
+    val pagerState: LazyPagingItems<GenreModel> = viewModel.pagerState.collectAsLazyPagingItems()
 
     if (state.isLoading)
         CompLoading()
@@ -46,7 +46,7 @@ fun HomeScreen(
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun HomeContent(
-    data: LazyPagingItems<Genres>,
+    data: LazyPagingItems<GenreModel>,
     navigateToListMovie: (String) -> Unit
 ) {
     Scaffold (

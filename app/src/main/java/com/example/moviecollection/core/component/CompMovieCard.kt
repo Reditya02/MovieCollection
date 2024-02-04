@@ -17,9 +17,9 @@ import coil.compose.AsyncImagePainter
 import coil.compose.rememberAsyncImagePainter
 import coil.request.ImageRequest
 import coil.size.Size
+import com.example.domain.model.MovieModel
 import com.example.moviecollection.R
-import com.example.moviecollection.core.helper.Const
-import com.example.moviecollection.domain.model.MovieModel
+import com.example.util.Const.POSTER_URL
 
 @Composable
 fun CompMovieCard(
@@ -32,7 +32,7 @@ fun CompMovieCard(
         Column {
             val painter = rememberAsyncImagePainter(
                 ImageRequest.Builder(LocalContext.current)
-                    .data("${Const.POSTER_URL}${movie.posterPath}")
+                    .data("${POSTER_URL}${movie.posterPath}")
                     .error(R.drawable.ic_launcher_background)
                     .size(Size.ORIGINAL)
                     .build()

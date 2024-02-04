@@ -4,13 +4,13 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.paging.PagingData
 import androidx.paging.cachedIn
-import com.example.moviecollection.data.response.MovieReviewResultsItem
-import com.example.moviecollection.domain.state.UIState
-import com.example.moviecollection.domain.usecase.GetDetailMovieUseCase
-import com.example.moviecollection.domain.usecase.GetMovieReviewUseCase
-import com.example.moviecollection.domain.usecase.GetMovieVideoUseCase
+import com.example.domain.model.MovieReviewModel
+import com.example.domain.usecase.GetDetailMovieUseCase
+import com.example.domain.usecase.GetMovieReviewUseCase
+import com.example.domain.usecase.GetMovieVideoUseCase
 import com.example.moviecollection.ui.detailmovie.model.DetailMovieState
 import com.example.moviecollection.ui.detailmovie.model.MovieVideoState
+import com.example.util.UIState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -34,8 +34,8 @@ class DetailMovieViewModel @Inject constructor(
     private val _videoState = MutableStateFlow(MovieVideoState())
     val videoState: StateFlow<MovieVideoState> = _videoState
 
-    private val _reviewState = MutableStateFlow<PagingData<MovieReviewResultsItem>>(PagingData.empty())
-    val reviewState: StateFlow<PagingData<MovieReviewResultsItem>> = _reviewState
+    private val _reviewState = MutableStateFlow<PagingData<MovieReviewModel>>(PagingData.empty())
+    val reviewState: StateFlow<PagingData<MovieReviewModel>> = _reviewState
 
     fun getDetailMovie(id: Int) = viewModelScope.launch {
         _state.update { it.copy(isLoading = true) }
@@ -66,7 +66,7 @@ class DetailMovieViewModel @Inject constructor(
                 UIState.Loading -> TODO()
                 is UIState.Success -> _videoState.update { it.copy(
                     result = uiState.data.results.first { movie ->
-                        movie.official && movie.type == "Trailer" && movie.site == "YouTube"
+                        movie.official == true && movie.type == "Trailer" && movie.site == "YouTube"
                     }
                 ) }
             }

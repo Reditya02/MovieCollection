@@ -31,19 +31,21 @@ import androidx.compose.ui.viewinterop.AndroidView
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.paging.compose.LazyPagingItems
 import androidx.paging.compose.collectAsLazyPagingItems
+import androidx.paging.compose.itemContentType
+import androidx.paging.compose.itemKey
 import coil.compose.AsyncImagePainter
 import coil.compose.rememberAsyncImagePainter
 import coil.request.ImageRequest
 import coil.size.Size
+import com.example.domain.model.DetailMovieModel
+import com.example.domain.model.MovieReviewModel
+import com.example.domain.model.MovieVideoModel
 import com.example.moviecollection.R
 import com.example.moviecollection.core.component.CompErrorMessage
 import com.example.moviecollection.core.component.CompLoading
 import com.example.moviecollection.core.component.CompReviewCard
-import com.example.moviecollection.core.helper.Const
-import com.example.moviecollection.data.response.DetailMovieResponse
-import com.example.moviecollection.data.response.MovieReviewResultsItem
-import com.example.moviecollection.data.response.MovieVideoResultsItem
 import com.example.moviecollection.ui.detailmovie.model.MovieVideoState
+import com.example.util.Const.POSTER_URL
 import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.YouTubePlayer
 import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.listeners.AbstractYouTubePlayerListener
 import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.views.YouTubePlayerView
@@ -60,7 +62,7 @@ fun DetailMovieScreen(
 
     val state = viewModel.state.collectAsState().value
     val videoState = viewModel.videoState.collectAsState().value
-    val reviewState: LazyPagingItems<MovieReviewResultsItem> = viewModel.reviewState.collectAsLazyPagingItems()
+    val reviewState: LazyPagingItems<MovieReviewModel> = viewModel.reviewState.collectAsLazyPagingItems()
 
     Scaffold(
         topBar = { CenterAlignedTopAppBar(
@@ -90,9 +92,9 @@ fun DetailMovieScreen(
 
 @Composable
 fun DetailMovieContent(
-    movie: DetailMovieResponse,
+    movie: DetailMovieModel,
     video: MovieVideoState,
-    listReview: LazyPagingItems<MovieReviewResultsItem>
+    listReview: LazyPagingItems<MovieReviewModel>
 ) {
     LazyColumn(
         modifier = Modifier
@@ -118,7 +120,7 @@ fun DetailMovieContent(
         }
 
         item(key = "review") { Text(modifier = Modifier.padding(top = 8.dp), text = "Review") }
-        items(listReview.itemCount, key = { listReview[it]!!.id }) {
+        items(listReview.itemCount, key = listReview.itemKey(), contentType = listReview.itemContentType()) {
             CompReviewCard(
                 modifier = Modifier.animateItemPlacement( tween(200) ),
                 review = listReview[it]!!
@@ -129,12 +131,12 @@ fun DetailMovieContent(
 
 @Composable
 fun DetailMovieHeader(
-    movie: DetailMovieResponse
+    movie: DetailMovieModel
 ) {
     Row {
         val painter = rememberAsyncImagePainter(
             ImageRequest.Builder(LocalContext.current)
-                .data("${Const.POSTER_URL}${movie.posterPath}")
+                .data("${POSTER_URL}${movie.posterPath}")
                 .error(R.drawable.ic_launcher_background)
                 .size(Size.ORIGINAL)
                 .build()
@@ -168,7 +170,7 @@ fun DetailMovieHeader(
 
 @Composable
 fun DetailMovieOverview(
-    movie: DetailMovieResponse
+    movie: DetailMovieModel
 ) {
     Column(
         Modifier.padding(vertical = 8.dp)
@@ -180,7 +182,7 @@ fun DetailMovieOverview(
 
 @Composable
 fun DetailMovieVideo(
-    video: MovieVideoResultsItem
+    video: MovieVideoModel
 ) {
     AndroidView(factory = {
         val view = YouTubePlayerView(it)
@@ -188,7 +190,7 @@ fun DetailMovieVideo(
             object : AbstractYouTubePlayerListener() {
                 override fun onReady(youTubePlayer: YouTubePlayer) {
                     super.onReady(youTubePlayer)
-                    youTubePlayer.cueVideo(video.key, 0f)
+                    youTubePlayer.cueVideo(video.key ?: "", 0f)
                 }
             }
         )

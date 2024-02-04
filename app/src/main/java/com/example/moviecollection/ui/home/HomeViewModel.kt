@@ -4,8 +4,8 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.paging.PagingData
 import androidx.paging.cachedIn
-import com.example.moviecollection.data.response.Genres
-import com.example.moviecollection.domain.usecase.GetListGenreUseCase
+import com.example.domain.model.GenreModel
+import com.example.domain.usecase.GetListGenreUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -23,8 +23,8 @@ class HomeViewModel @Inject constructor(
     private val _state = MutableStateFlow(HomeState())
     val state: StateFlow<HomeState> = _state
 
-    private val _pagerState: MutableStateFlow<PagingData<Genres>> = MutableStateFlow(PagingData.empty())
-    val pagerState: StateFlow<PagingData<Genres>> = _pagerState
+    private val _pagerState: MutableStateFlow<PagingData<GenreModel>> = MutableStateFlow(PagingData.empty())
+    val pagerState: StateFlow<PagingData<GenreModel>> = _pagerState
 
     init {
         getListGenre()

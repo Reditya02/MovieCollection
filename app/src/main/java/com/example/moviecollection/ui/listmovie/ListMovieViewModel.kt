@@ -4,8 +4,8 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.paging.PagingData
 import androidx.paging.cachedIn
-import com.example.moviecollection.domain.model.MovieModel
-import com.example.moviecollection.domain.usecase.GetListMovieByGenreUseCase
+import com.example.domain.model.MovieModel
+import com.example.domain.usecase.GetListMovieByGenreUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
