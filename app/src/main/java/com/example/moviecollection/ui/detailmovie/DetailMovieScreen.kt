@@ -14,6 +14,7 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material3.CenterAlignedTopAppBar
+import androidx.compose.material3.Divider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
@@ -26,6 +27,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.viewinterop.AndroidView
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -103,9 +105,11 @@ fun DetailMovieContent(
         item(key = "header") { DetailMovieHeader(movie = movie) }
 
         item(key = "overview") { DetailMovieOverview(movie = movie) }
+
         item(key = "video") {
             Column {
                 Text(text = "Trailer")
+                Divider(Modifier.padding(4.dp))
                 if (video.isLoading) {
                     CompLoading(
                         modifier = Modifier
@@ -119,8 +123,17 @@ fun DetailMovieContent(
             }
         }
 
-        item(key = "review") { Text(modifier = Modifier.padding(top = 8.dp), text = "Review") }
-        items(listReview.itemCount, key = listReview.itemKey(), contentType = listReview.itemContentType()) {
+        item(key = "Review") {
+            Column {
+                Text(modifier = Modifier.padding(top = 16.dp), text = "Review")
+                Divider(Modifier.padding(vertical = 4.dp))
+            }
+        }
+        items(
+            listReview.itemCount,
+            key = listReview.itemKey(),
+            contentType = listReview.itemContentType()
+        ) {
             CompReviewCard(
                 modifier = Modifier.animateItemPlacement( tween(200) ),
                 review = listReview[it]!!
@@ -163,7 +176,8 @@ fun DetailMovieHeader(
         Spacer(modifier = Modifier.width(8.dp))
         Text(
             modifier = Modifier.weight(6f),
-            text = movie.title
+            text = movie.title,
+            overflow = TextOverflow.Ellipsis
         )
     }
 }
@@ -173,9 +187,10 @@ fun DetailMovieOverview(
     movie: DetailMovieModel
 ) {
     Column(
-        Modifier.padding(vertical = 8.dp)
+        Modifier.padding(vertical = 24.dp)
     ) {
         Text(text = "Overview")
+        Divider(Modifier.padding(vertical = 4.dp))
         Text(text = movie.overview)
     }
 }

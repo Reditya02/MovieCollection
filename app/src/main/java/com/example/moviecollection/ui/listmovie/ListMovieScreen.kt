@@ -90,23 +90,7 @@ fun ListMovieContent(
                         .animateItemPlacement()
                         .clip(MaterialTheme.shapes.medium)
                         .clickable { onClick(movie?.id ?: 0) },
-                    movie = movie ?: MovieModel(
-                        id = 4307,
-                        overview = null,
-                        originalLanguage = null,
-                        originalTitle = null,
-                        video = null,
-                        title = null,
-                        genreIds = null,
-                        posterPath = null,
-                        backdropPath = null,
-                        releaseDate = null,
-                        popularity = 2.3,
-                        voteAverage = null,
-                        adult = null,
-                        voteCount = null
-
-                    )
+                    movie = movie ?: MovieModel(id = 0)
                 )
             }
             pagingData.apply {

@@ -6,6 +6,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material3.Card
+import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.CenterAlignedTopAppBar
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Scaffold
@@ -13,11 +14,14 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.paging.compose.LazyPagingItems
 import androidx.paging.compose.collectAsLazyPagingItems
+import androidx.paging.compose.itemContentType
+import androidx.paging.compose.itemKey
 import com.example.domain.model.GenreModel
 import com.example.moviecollection.core.component.CompErrorMessage
 import com.example.moviecollection.core.component.CompLoading
@@ -55,11 +59,16 @@ fun HomeContent(
         LazyColumn(
             modifier = Modifier.padding(paddingValues),
             content = {
-                items(data.itemCount, key = { index -> data[index]!!.id }) { index ->
+                items(
+                    data.itemCount,
+                    key = data.itemKey(),
+                    contentType = data.itemContentType()
+                ) { index ->
                     Card(
                         modifier = Modifier
                             .padding(8.dp)
                             .fillMaxWidth()
+                            .clip(CardDefaults.shape)
                             .clickable { navigateToListMovie(Gson().toJson(data[index])) }
                     ) {
                         Text(
@@ -67,7 +76,7 @@ fun HomeContent(
                                 .padding(8.dp)
                                 .fillMaxWidth(),
                             textAlign = TextAlign.Center,
-                            text = data[index]!!.name
+                            text = data[index]?.name ?: ""
                         )
                     }
                 }
