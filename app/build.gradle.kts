@@ -41,7 +41,8 @@ android {
         freeCompilerArgs = freeCompilerArgs +
                 "-opt-in=androidx.paging.ExperimentalPagingApi" +
                 "-opt-in=androidx.compose.material3.ExperimentalMaterial3Api" +
-                "-opt-in=androidx.compose.foundation.ExperimentalFoundationApi"
+                "-opt-in=androidx.compose.foundation.ExperimentalFoundationApi" +
+                "-opt-in=androidx.compose.material.ExperimentalMaterialApi"
     }
     buildFeatures {
         compose = true
@@ -66,6 +67,8 @@ dependencies {
     implementation("androidx.compose.ui:ui-graphics")
     implementation("androidx.compose.ui:ui-tooling-preview")
     implementation("androidx.compose.material3:material3")
+
+    implementation("androidx.compose.material:material:1.6.0")
 
     //Coil
     implementation("io.coil-kt:coil-compose:2.2.2")
