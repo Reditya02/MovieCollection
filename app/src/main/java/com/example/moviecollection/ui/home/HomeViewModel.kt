@@ -20,8 +20,6 @@ import javax.inject.Inject
 class HomeViewModel @Inject constructor(
     private val getListGenreUseCase: GetListGenreUseCase
 ) : ViewModel() {
-    private val _state = MutableStateFlow(HomeState())
-    val state: StateFlow<HomeState> = _state
 
     private val _pagerState: MutableStateFlow<PagingData<GenreModel>> = MutableStateFlow(PagingData.empty())
     val pagerState: StateFlow<PagingData<GenreModel>> = _pagerState
@@ -30,22 +28,13 @@ class HomeViewModel @Inject constructor(
         getListGenre()
     }
 
-    private fun getListGenre() = viewModelScope.launch {
-        _state.update { it.copy(isLoading = true) }
+    fun getListGenre() = viewModelScope.launch {
         delay(400)
         getListGenreUseCase()
             .distinctUntilChanged()
             .cachedIn(viewModelScope)
-            .catch { error ->
-                _state.update { it.copy(
-                    isLoading = false,
-                    errorMessage = error.message ?: "Error"
-                ) }
-            }
             .collect { result ->
                 _pagerState.value = result
-                _state.update { it.copy(isLoading = false) }
             }
-
     }
 }

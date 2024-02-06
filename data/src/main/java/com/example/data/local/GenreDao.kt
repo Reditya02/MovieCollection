@@ -16,6 +16,9 @@ interface GenreDao {
     @Query("select * from genre order by name asc")
     fun getAll(): PagingSource<Int, GenreModel>
 
+    @Query("select count(*) from genre")
+    suspend fun getCount(): Int
+
     @Query("delete from genre")
     suspend fun deleteAll()
 }
