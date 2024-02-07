@@ -63,6 +63,8 @@ class MovieRemoteMediator(
             database.movieDao().insert(response)
             MediatorResult.Success(endOfPagination)
         } catch (exception: Exception) {
+            if (database.movieDao().countByGenre("%$genre%") > 0)
+                MediatorResult.Success(true)
             remoteMediatorExceptionHandler(exception)
         }
     }

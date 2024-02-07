@@ -15,6 +15,9 @@ interface MovieDao {
     @Query("select * from movie where genreIds like :genre order by popularity desc")
     fun getByGenre(genre: String): PagingSource<Int, MovieModel>
 
+    @Query("select count(*) from movie where genreIds like :genre")
+    suspend fun countByGenre(genre: String): Int
+
     @Query("delete from movie where genreIds like :genre")
     suspend fun deleteByGenre(genre: Int)
 }

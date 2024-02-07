@@ -5,9 +5,11 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
-import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
+import androidx.compose.material.pullrefresh.PullRefreshIndicator
+import androidx.compose.material.pullrefresh.pullRefresh
+import androidx.compose.material.pullrefresh.rememberPullRefreshState
 import androidx.compose.material3.CenterAlignedTopAppBar
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -16,7 +18,7 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.collectAsState
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.unit.dp
@@ -32,12 +34,6 @@ import com.example.moviecollection.core.component.CompErrorMessage
 import com.example.moviecollection.core.component.CompLoading
 import com.example.moviecollection.core.component.CompMovieCard
 import com.google.gson.Gson
-import androidx.compose.material.pullrefresh.PullRefreshIndicator
-import androidx.compose.material.pullrefresh.pullRefresh
-import androidx.compose.material.pullrefresh.rememberPullRefreshState
-import androidx.compose.ui.Alignment
-import androidx.compose.ui.text.style.LineHeightStyle
-import kotlinx.coroutines.Job
 
 @Composable
 fun ListMovieScreen(
@@ -52,7 +48,6 @@ fun ListMovieScreen(
         viewModel.getListMovieByGenre(arguments.id)
     }
 
-    val state = viewModel.state.collectAsState().value
     val pagingState: LazyPagingItems<MovieModel> = viewModel.pagingState.collectAsLazyPagingItems()
 
     Scaffold(
@@ -66,88 +61,87 @@ fun ListMovieScreen(
 
         ) }
     ) {
-        Box(modifier = Modifier.padding(it)) {
-            if (state.isLoading)
-                CompLoading()
-            else if (state.errorMessage.isNotEmpty())
-                CompErrorMessage(message = state.errorMessage)
-            else if (pagingState.itemCount > 0)
-                ListMovieContent(
-                    onClick = { onClick(it) },
-                    pagingData = pagingState,
-                    isLoading = state.isLoading,
-                    getData = { viewModel.getListMovieByGenre(arguments.id) }
-
-                )
+        val refreshState = rememberPullRefreshState(
+            false,
+            { viewModel.getListMovieByGenre(arguments.id) }
+        )
+        Box(modifier = Modifier
+            .padding(it)
+            .pullRefresh(refreshState)
+        ) {
+            when (val state = pagingState.loadState.refresh) {
+                is LoadState.Error ->
+                    CompErrorMessage(message = state.error.message ?: "Error")
+                LoadState.Loading ->
+                    CompLoading()
+                is LoadState.NotLoading ->
+                    ListMovieContent(
+                        onClick = { onClick(it) },
+                        pagingData = pagingState,
+                    )
+            }
+            PullRefreshIndicator(
+                modifier = Modifier.align(Alignment.TopCenter),
+                refreshing = false,
+                state = refreshState,
+            )
         }
     }
 }
 
-@OptIn(ExperimentalMaterialApi::class)
 @Composable
 fun ListMovieContent(
     onClick: (Int) -> Unit,
-    isLoading: Boolean,
-    getData: () -> Unit,
     pagingData: LazyPagingItems<MovieModel>
 ) {
-    val pullRefreshState = rememberPullRefreshState(false, getData)
-
-    Box(Modifier.pullRefresh(pullRefreshState)) {
-        LazyVerticalGrid(
-            columns = GridCells.Fixed(2),
-            content = {
-                items(
-                    pagingData.itemCount,
-                    key = pagingData.itemKey(),
-                    contentType = pagingData.itemContentType()
-                ) { index ->
-                    val movie = pagingData[index]
-                    CompMovieCard(
-                        modifier = Modifier
-                            .padding(8.dp)
-                            .animateItemPlacement()
-                            .clip(MaterialTheme.shapes.medium)
-                            .clickable { onClick(movie?.id ?: 0) },
-                        movie = movie ?: MovieModel(id = 0)
-                    )
-                }
-                pagingData.apply {
-                    when {
-                        loadState.refresh is LoadState.Loading -> {
-                            item { CompLoading() }
-                        }
-
-                        loadState.refresh is LoadState.Error -> {
-                            val error = pagingData.loadState.refresh as LoadState.Error
-                            item {
-                                CompErrorMessage(
-                                    message = error.error.localizedMessage ?: "Empty error"
-                                )
-                            }
-                        }
-
-                        loadState.append is LoadState.Loading -> {
-                            item { CompLoading() }
-                        }
-
-                        loadState.append is LoadState.Error -> {
-                            val error = pagingData.loadState.refresh as LoadState.Error
-                            item {
-                                CompErrorMessage(
-                                    message = error.error.localizedMessage ?: "Empty error"
-                                )
-                            }
-                        }
-
+    LazyVerticalGrid(
+        columns = GridCells.Fixed(2),
+        content = {
+            items(
+                pagingData.itemCount,
+                key = pagingData.itemKey(),
+                contentType = pagingData.itemContentType()
+            ) { index ->
+                val movie = pagingData[index]
+                CompMovieCard(
+                    modifier = Modifier
+                        .padding(8.dp)
+                        .animateItemPlacement()
+                        .clip(MaterialTheme.shapes.medium)
+                        .clickable { onClick(movie?.id ?: 0) },
+                    movie = movie ?: MovieModel(id = 0)
+                )
+            }
+            pagingData.apply {
+                when {
+                    loadState.refresh is LoadState.Loading -> {
+                        item { CompLoading() }
                     }
+
+                    loadState.refresh is LoadState.Error -> {
+                        val error = pagingData.loadState.refresh as LoadState.Error
+                        item {
+                            CompErrorMessage(
+                                message = error.error.localizedMessage ?: "Empty error"
+                            )
+                        }
+                    }
+
+                    loadState.append is LoadState.Loading -> {
+                        item { CompLoading() }
+                    }
+
+                    loadState.append is LoadState.Error -> {
+                        val error = pagingData.loadState.refresh as LoadState.Error
+                        item {
+                            CompErrorMessage(
+                                message = error.error.localizedMessage ?: "Empty error"
+                            )
+                        }
+                    }
+
                 }
-            },
-        )
-        PullRefreshIndicator(
-            modifier = Modifier.align(Alignment.TopCenter),
-            refreshing = isLoading,
-            state = pullRefreshState,
-        )
-    }
+            }
+        },
+    )
 }
