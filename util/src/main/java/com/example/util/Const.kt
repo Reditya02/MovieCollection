@@ -7,4 +7,5 @@ object Const {
 
     const val API_KEY = "Bearer eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiI4MjhlY2I1YWVhMDZjNDI5NWE3NjBlZDc0Mzc3MmFiNyIsInN1YiI6IjYzNmQwM2JlMTY4NGY3MDA3NzM1OTYxMiIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.WtsgHddnJ6pzD0v8wW_mBYyWbVDlnUiZJyeJpzWBITU"
 
+    const val SHARE_URL = "https://www.themoviedb.org/movie/"
 }

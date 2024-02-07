@@ -47,7 +47,10 @@ class DetailMovieViewModel @Inject constructor(
                 is UIState.Error -> _state.update { it.copy(errorMessage = uiState.message) }
                 UIState.Loading -> TODO()
                 is UIState.Success -> {
-                    _state.update { it.copy(result = uiState.data) }
+                    _state.update { it.copy(
+                        result = uiState.data,
+                        errorMessage = ""
+                    ) }
                     getMovieVideo(id)
                     getMovieReview(id)
                 }

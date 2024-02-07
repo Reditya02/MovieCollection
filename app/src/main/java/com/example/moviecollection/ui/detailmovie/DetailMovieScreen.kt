@@ -1,5 +1,6 @@
 package com.example.moviecollection.ui.detailmovie
 
+import android.content.Intent
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Box
@@ -13,6 +14,10 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
+import androidx.compose.material.icons.filled.Share
+import androidx.compose.material.pullrefresh.PullRefreshIndicator
+import androidx.compose.material.pullrefresh.pullRefresh
+import androidx.compose.material.pullrefresh.rememberPullRefreshState
 import androidx.compose.material3.CenterAlignedTopAppBar
 import androidx.compose.material3.Divider
 import androidx.compose.material3.Icon
@@ -23,6 +28,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.layout.ContentScale
@@ -48,6 +54,7 @@ import com.example.moviecollection.core.component.CompLoading
 import com.example.moviecollection.core.component.CompReviewCard
 import com.example.moviecollection.ui.detailmovie.model.MovieVideoState
 import com.example.util.Const.POSTER_URL
+import com.example.util.Const.SHARE_URL
 import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.YouTubePlayer
 import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.listeners.AbstractYouTubePlayerListener
 import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.views.YouTubePlayerView
@@ -65,6 +72,18 @@ fun DetailMovieScreen(
     val state = viewModel.state.collectAsState().value
     val videoState = viewModel.videoState.collectAsState().value
     val reviewState: LazyPagingItems<MovieReviewModel> = viewModel.reviewState.collectAsLazyPagingItems()
+    val context = LocalContext.current
+
+    val shareUrl = "$SHARE_URL${state.result.id}"
+
+    val shareIntent = Intent.createChooser(
+        Intent(Intent.ACTION_SEND).apply {
+            putExtra(Intent.EXTRA_TEXT, shareUrl)
+            type = "text/plain"
+        },
+        null
+    )
+
 
     Scaffold(
         topBar = { CenterAlignedTopAppBar(
@@ -73,10 +92,25 @@ fun DetailMovieScreen(
                 IconButton(onClick = onBackPressed) {
                     Icon(imageVector = Icons.Default.ArrowBack, contentDescription = "")
                 }
+            },
+            actions = {
+                IconButton(onClick = {
+                    context.startActivity(shareIntent)
+                }) {
+                    Icon(imageVector = Icons.Default.Share, contentDescription = "")
+                }
             }
         ) }
     ) {
-        Box(modifier = Modifier.padding(it)) {
+        val refreshState = rememberPullRefreshState(
+            false,
+            { viewModel.getDetailMovie(id) }
+        )
+
+        Box(modifier = Modifier
+            .padding(it)
+            .pullRefresh(refreshState)
+        ) {
             if (state.isLoading)
                 CompLoading()
             else if (state.errorMessage.isNotEmpty())
@@ -88,6 +122,12 @@ fun DetailMovieScreen(
                     listReview = reviewState
                 )
             }
+
+            PullRefreshIndicator(
+                modifier = Modifier.align(Alignment.TopCenter),
+                refreshing = false,
+                state = refreshState,
+            )
         }
     }
 }
