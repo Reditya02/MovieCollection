@@ -35,7 +35,8 @@ class GenreRemoteMediator(
         } catch (exception: Exception) {
             if (database.genreDao().getCount() > 0)
                 MediatorResult.Success(true)
-            remoteMediatorExceptionHandler(exception)
+            else
+                remoteMediatorExceptionHandler(exception)
         }
     }
 
