@@ -1,5 +1,6 @@
 package com.example.ui
 
+import android.content.Intent
 import androidx.compose.runtime.Composable
 import androidx.navigation.NavHostController
 import androidx.navigation.NavType
@@ -7,6 +8,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
+import androidx.navigation.navDeepLink
 import com.example.ui.navigation.Screen
 import com.example.ui.feature.detailmovie.DetailMovieScreen
 import com.example.ui.feature.home.HomeScreen
@@ -43,6 +45,10 @@ fun MovieCollectionApp(
 
         composable(
             route = Screen.DetailMovie.route,
+            deepLinks = listOf(navDeepLink {
+                uriPattern = "movie://moviecollection.com/{id}"
+                action = Intent.ACTION_VIEW
+            }),
             arguments = listOf(navArgument("id") { type = NavType.IntType })
         ) {
             DetailMovieScreen(
