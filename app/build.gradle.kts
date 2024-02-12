@@ -68,15 +68,6 @@ dependencies {
     implementation("androidx.compose.ui:ui-tooling-preview")
     implementation("androidx.compose.material3:material3")
 
-    implementation("androidx.compose.material:material:1.6.0")
-
-    //Coil
-    implementation("io.coil-kt:coil-compose:2.2.2")
-    implementation("com.github.skydoves:landscapist-coil:1.5.2")
-
-    //Lottie
-    implementation("com.airbnb.android:lottie-compose:5.2.0")
-
     //Dagger-Hilt
     implementation("com.google.dagger:hilt-android:2.50")
     kapt("com.google.dagger:hilt-android-compiler:2.50")
@@ -88,31 +79,15 @@ dependencies {
     implementation("com.squareup.retrofit2:converter-gson:2.9.0")
     implementation("com.squareup.okhttp3:logging-interceptor:4.9.0")
 
-    //Coroutines
-    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.3.8")
-    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.3.8")
-
-    //ViewModel Lifecycle
-    implementation("androidx.lifecycle:lifecycle-viewmodel-ktx:$2.4.0")
-
-    //Navigation
-    implementation("androidx.navigation:navigation-compose:2.6.0")
-
-    //Youtube Player
-    implementation("com.pierfrancescosoffritti.androidyoutubeplayer:core:11.1.0")
-
-    //Paging
-    implementation ("androidx.paging:paging-runtime-ktx:3.2.1")
-    implementation ("androidx.paging:paging-compose:3.2.1")
-
     //Room
     implementation("androidx.room:room-paging:2.6.1")
     implementation ("androidx.room:room-ktx:2.6.1")
     ksp("androidx.room:room-compiler:2.6.1")
 
-    implementation(project(":domain"))
     implementation(project(":util"))
     implementation(project(":data"))
+    implementation(project(":domain"))
+    implementation(project(":ui"))
 
     testImplementation("junit:junit:4.13.2")
     androidTestImplementation("androidx.test.ext:junit:1.1.5")
