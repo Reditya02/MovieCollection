@@ -44,7 +44,6 @@ fun ListMovieScreen(
     onBackPressed: () -> Unit,
     onClick: (Int) -> Unit
 ) {
-    Log.d("Reditya", "Recompose Screen")
     val arguments = remember { Gson().fromJson(data, GenreModel::class.java) }
 
     LaunchedEffect(Unit) {
@@ -66,18 +65,12 @@ fun ListMovieScreen(
     ) {
         val refreshState = rememberPullRefreshState(
             false,
-            {
-                Log.d("Reditya", "Refresh")
-                viewModel.getListMovieByGenre(arguments.id)
-            }
+            { viewModel.getListMovieByGenre(arguments.id) }
         )
         Box(modifier = Modifier
             .padding(it)
             .pullRefresh(refreshState)
         ) {
-            LaunchedEffect(key1 = pagingState.loadState.refresh, block = {
-                Log.d("Reditya", "Refresh State ${pagingState.loadState.refresh}")
-            })
 
             when (val state = pagingState.loadState.refresh) {
                 is LoadState.Error ->
@@ -104,8 +97,6 @@ fun ListMovieContent(
     onClick: (Int) -> Unit,
     pagingData: LazyPagingItems<MovieModel>
 ) {
-    Log.d("Reditya", "Recompose Content")
-
     LazyVerticalGrid(
         columns = GridCells.Fixed(2),
         content = {
