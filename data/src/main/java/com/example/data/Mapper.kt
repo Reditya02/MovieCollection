@@ -13,7 +13,7 @@ import com.example.domain.model.ListMovieVideoModel
 import com.example.domain.model.MovieModel
 import com.example.domain.model.MovieReviewModel
 import com.example.domain.model.MovieVideoModel
-import com.example.moviecollection.data.response.MovieResultsItem
+import com.example.data.response.MovieResultsItem
 
 object Mapper {
     private fun MovieResultsItem.mapToMovieModel() = MovieModel(

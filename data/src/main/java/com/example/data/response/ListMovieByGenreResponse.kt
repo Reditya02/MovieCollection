@@ -1,4 +1,4 @@
-package com.example.moviecollection.data.response
+package com.example.data.response
 
 import androidx.room.PrimaryKey
 import com.google.gson.annotations.SerializedName

@@ -2,7 +2,7 @@ package com.example.data.remote
 
 import com.example.data.response.DetailMovieResponse
 import com.example.data.response.ListGenreResponse
-import com.example.moviecollection.data.response.ListMovieByGenreResponse
+import com.example.data.response.ListMovieByGenreResponse
 import com.example.data.response.MovieReviewResponse
 import com.example.data.response.MovieVideoResponse
 import retrofit2.Response
