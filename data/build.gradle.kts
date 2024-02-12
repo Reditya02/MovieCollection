@@ -3,6 +3,7 @@ plugins {
     id("org.jetbrains.kotlin.android")
     id("kotlin-kapt")
     id("com.google.devtools.ksp")
+    id("com.google.gms.google-services")
 }
 
 android {
@@ -68,6 +69,11 @@ dependencies {
     implementation("androidx.room:room-paging:2.6.1")
     implementation ("androidx.room:room-ktx:2.6.1")
     ksp("androidx.room:room-compiler:2.6.1")
+
+    //Firebase
+    implementation(platform("com.google.firebase:firebase-bom:32.7.2"))
+    implementation("com.google.firebase:firebase-messaging:23.4.1")
+    implementation("com.google.firebase:firebase-analytics")
 
     implementation(project(":domain"))
     implementation(project(":util"))

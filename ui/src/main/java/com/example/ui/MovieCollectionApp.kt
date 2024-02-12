@@ -1,7 +1,9 @@
 package com.example.ui
 
 import android.content.Intent
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Modifier
 import androidx.navigation.NavHostController
 import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
@@ -19,6 +21,7 @@ fun MovieCollectionApp(
     navController: NavHostController = rememberNavController(),
 ) {
     NavHost(
+        modifier = Modifier.fillMaxSize(),
         navController = navController,
         startDestination = Screen.Home.route
     ) {

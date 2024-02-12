@@ -4,6 +4,7 @@ plugins {
     id("kotlin-kapt")
     id("com.google.devtools.ksp")
     id("com.google.dagger.hilt.android")
+    id("com.google.gms.google-services")
 }
 
 android {
@@ -42,7 +43,8 @@ android {
                 "-opt-in=androidx.paging.ExperimentalPagingApi" +
                 "-opt-in=androidx.compose.material3.ExperimentalMaterial3Api" +
                 "-opt-in=androidx.compose.foundation.ExperimentalFoundationApi" +
-                "-opt-in=androidx.compose.material.ExperimentalMaterialApi"
+                "-opt-in=androidx.compose.material.ExperimentalMaterialApi" +
+                "-opt-in=com.google.accompanist.permissions.ExperimentalPermissionsApi"
     }
     buildFeatures {
         compose = true
@@ -83,6 +85,12 @@ dependencies {
     implementation("androidx.room:room-paging:2.6.1")
     implementation ("androidx.room:room-ktx:2.6.1")
     ksp("androidx.room:room-compiler:2.6.1")
+
+    //Permission
+    implementation("com.google.accompanist:accompanist-permissions:0.32.0")
+
+    implementation(platform("com.google.firebase:firebase-bom:32.7.2"))
+    implementation("com.google.firebase:firebase-messaging:23.4.1")
 
     implementation(project(":util"))
     implementation(project(":data"))
