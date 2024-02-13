@@ -7,14 +7,8 @@ data class MovieVideoState(
     val errorMessage: String = "",
     val result: MovieVideoModel = MovieVideoModel(
         site = "",
-        size = 0,
-        iso31661 = "",
-        name = "",
         official = false,
-        id = "",
         type = "",
-        publishedAt = "",
-        iso6391 = "",
         key = ""
     )
 )

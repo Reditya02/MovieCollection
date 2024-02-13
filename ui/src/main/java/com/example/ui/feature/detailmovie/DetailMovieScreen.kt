@@ -177,13 +177,8 @@ fun DetailMovieContent(
             CompReviewCard(
                 modifier = Modifier.animateItemPlacement( tween(200) ),
                 review = listReview[it] ?: MovieReviewModel(
-                    authorDetails = null,
-                    updatedAt = null,
                     author = null,
-                    createdAt = null,
-                    id = null,
                     content = null,
-                    url = null
                 )
             )
         }
