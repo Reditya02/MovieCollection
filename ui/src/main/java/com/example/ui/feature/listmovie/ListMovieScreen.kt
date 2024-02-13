@@ -115,12 +115,12 @@ fun ListMovieContent(
                 )
             }
             pagingData.apply {
-                when {
-                    loadState.refresh is LoadState.Loading -> {
+                when (loadState.append) {
+                    is LoadState.Loading -> {
                         item { CompLoading() }
                     }
 
-                    loadState.refresh is LoadState.Error -> {
+                    is LoadState.Error -> {
                         val error = pagingData.loadState.refresh as LoadState.Error
                         item {
                             CompErrorMessage(
@@ -129,19 +129,7 @@ fun ListMovieContent(
                         }
                     }
 
-                    loadState.append is LoadState.Loading -> {
-                        item { CompLoading() }
-                    }
-
-                    loadState.append is LoadState.Error -> {
-                        val error = pagingData.loadState.refresh as LoadState.Error
-                        item {
-                            CompErrorMessage(
-                                message = error.error.localizedMessage ?: "Empty error"
-                            )
-                        }
-                    }
-
+                    is LoadState.NotLoading -> {}
                 }
             }
         },

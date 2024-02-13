@@ -12,7 +12,7 @@ object Handler {
         })
     )
 
-    fun retrofitExceptionHandler(throwable: Throwable) = UIState.Error(
+    fun retrofitExceptionHandler(throwable: Throwable) = Result.Error(
         message = when(throwable) {
             is IOException -> "No Internet"
             else -> throwable.message ?: "Error"

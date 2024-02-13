@@ -13,24 +13,16 @@ class GenreRemoteMediator(
     private val remoteDataSources: RemoteDataSources,
     private val database: AppDatabase
 ) : RemoteMediator<Int, GenreModel>() {
-
-    override suspend fun initialize(): InitializeAction {
-        return InitializeAction.LAUNCH_INITIAL_REFRESH
-    }
-
     override suspend fun load(loadType: LoadType, state: PagingState<Int, GenreModel>): MediatorResult {
         return try {
             val response = remoteDataSources.getListGenre().sortedBy { it.name }
-            val endOfPagination = response.isEmpty()
 
-            database.withTransaction {
-                if (loadType == LoadType.REFRESH) {
-                    database.genreDao().deleteAll()
-                }
+            if (loadType == LoadType.REFRESH) {
+                database.genreDao().deleteAll()
             }
 
             database.genreDao().insert(response)
-            MediatorResult.Success(endOfPagination)
+            MediatorResult.Success(true)
         } catch (exception: Exception) {
             if (database.genreDao().getCount() > 0)
                 MediatorResult.Success(true)

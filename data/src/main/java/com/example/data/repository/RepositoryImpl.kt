@@ -41,7 +41,7 @@ class RepositoryImpl @Inject constructor(
 
     override fun getMovieReview(id: Int): Flow<PagingData<MovieReviewModel>> {
         return Pager(
-            config = PagingConfig( pageSize = 10, prefetchDistance = 5 ),
+            config = PagingConfig( pageSize = 10, prefetchDistance = 4),
             pagingSourceFactory = { ReviewPagingSources(remoteDataSources, id) }
         ).flow
     }

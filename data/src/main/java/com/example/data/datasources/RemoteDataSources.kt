@@ -3,7 +3,7 @@ package com.example.data.datasources
 import com.example.data.remote.ApiService
 import com.example.domain.model.DetailMovieModel
 import com.example.domain.model.ListMovieVideoModel
-import com.example.util.UIState
+import com.example.util.Result
 import com.example.util.Handler.retrofitExceptionHandler
 import com.example.data.Mapper.mapToDetailMovieModel
 import com.example.data.Mapper.mapToListGenre
@@ -25,30 +25,30 @@ class RemoteDataSources @Inject constructor(
     suspend fun getListMovieByGenre(genre: Int, page: Int) =
         apiService.getListMovieByGenre(genre, page).listResults.mapToListMovieModel()
 
-    fun getDetailMovie(id: Int): Flow<UIState<DetailMovieModel>> = flow {
-        emit(UIState.Loading)
+    fun getDetailMovie(id: Int): Flow<Result<DetailMovieModel>> = flow {
+        emit(Result.Loading)
         val response = apiService.getDetailMovie(id)
         val body = response.body()
         if (response.isSuccessful && body != null) {
-            emit(UIState.Success(body.mapToDetailMovieModel()))
+            emit(Result.Success(body.mapToDetailMovieModel()))
         } else {
-            emit(UIState.Error(response.message()))
+            emit(Result.Error(response.message()))
         }
     }.catch {
         emit(retrofitExceptionHandler(it))
     }.flowOn(Dispatchers.IO)
 
-    fun getMovieVideo(id: Int): Flow<UIState<ListMovieVideoModel>> = flow {
-        emit(UIState.Loading)
+    fun getMovieVideo(id: Int): Flow<Result<ListMovieVideoModel>> = flow {
+        emit(Result.Loading)
         val response = apiService.getMovieVideo(id)
         val body = response.body()
         if (response.isSuccessful && body != null) {
             if (body.results.isNotEmpty())
-                emit(UIState.Success(body.mapToListMovieVideoModel()))
+                emit(Result.Success(body.mapToListMovieVideoModel()))
             else
-                emit(UIState.Empty)
+                emit(Result.Error("Data Not Found"))
         } else {
-            emit(UIState.Error(response.message()))
+            emit(Result.Error(response.message()))
         }
     }.catch {
         emit(retrofitExceptionHandler(it))

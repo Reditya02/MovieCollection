@@ -4,15 +4,15 @@ import com.google.gson.annotations.SerializedName
 
 data class ListGenreResponse(
 
-	@field:SerializedName("genres")
+	@SerializedName("genres")
 	val genres: List<Genres>
 )
 
 data class Genres(
 
-	@field:SerializedName("name")
+	@SerializedName("name")
 	val name: String,
 
-	@field:SerializedName("id")
+	@SerializedName("id")
 	val id: Int
 )

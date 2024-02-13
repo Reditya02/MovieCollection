@@ -10,7 +10,7 @@ import com.example.domain.usecase.GetMovieReviewUseCase
 import com.example.domain.usecase.GetMovieVideoUseCase
 import com.example.ui.feature.detailmovie.model.DetailMovieState
 import com.example.ui.feature.detailmovie.model.MovieVideoState
-import com.example.util.UIState
+import com.example.util.Result
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -40,15 +40,14 @@ class DetailMovieViewModel @Inject constructor(
     fun getDetailMovie(id: Int) = viewModelScope.launch {
         _state.update { it.copy(isLoading = true) }
         delay(400)
-        getDetailMovieUseCase(id).filter { it != UIState.Loading }.collectLatest { uiState ->
+        getDetailMovieUseCase(id).filter { it != Result.Loading }.collectLatest { result ->
             _state.update { it.copy(isLoading = false) }
-            when(uiState) {
-                UIState.Empty -> _state.update { it.copy(errorMessage = "No data found") }
-                is UIState.Error -> _state.update { it.copy(errorMessage = uiState.message) }
-                UIState.Loading -> TODO()
-                is UIState.Success -> {
+            when(result) {
+                is Result.Error -> _state.update { it.copy(errorMessage = result.message) }
+                Result.Loading -> {}
+                is Result.Success -> {
                     _state.update { it.copy(
-                        result = uiState.data,
+                        result = result.data,
                         errorMessage = ""
                     ) }
                     getMovieVideo(id)
@@ -61,14 +60,13 @@ class DetailMovieViewModel @Inject constructor(
     private fun getMovieVideo(id: Int) = viewModelScope.launch {
         _videoState.update { it.copy(isLoading = true) }
         delay(400)
-        getMovieVideoUseCase(id).filter { it != UIState.Loading }.collectLatest { uiState ->
+        getMovieVideoUseCase(id).filter { it != Result.Loading }.collectLatest { result ->
             _videoState.update { it.copy(isLoading = false) }
-            when(uiState) {
-                UIState.Empty -> _videoState.update { it.copy(errorMessage = "No data found") }
-                is UIState.Error -> _videoState.update { it.copy(errorMessage = uiState.message) }
-                UIState.Loading -> TODO()
-                is UIState.Success -> _videoState.update { it.copy(
-                    result = uiState.data.results.first { movie ->
+            when(result) {
+                is Result.Error -> _videoState.update { it.copy(errorMessage = result.message) }
+                Result.Loading -> {}
+                is Result.Success -> _videoState.update { it.copy(
+                    result = result.data.results.first { movie ->
                         movie.official == true && movie.type == "Trailer" && movie.site == "YouTube"
                     }
                 ) }

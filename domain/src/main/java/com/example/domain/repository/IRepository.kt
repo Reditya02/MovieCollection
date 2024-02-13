@@ -6,7 +6,7 @@ import com.example.domain.model.GenreModel
 import com.example.domain.model.ListMovieVideoModel
 import com.example.domain.model.MovieModel
 import com.example.domain.model.MovieReviewModel
-import com.example.util.UIState
+import com.example.util.Result
 import kotlinx.coroutines.flow.Flow
 
 interface IRepository {
@@ -14,9 +14,9 @@ interface IRepository {
 
     fun getListMovieByGenre(genre: Int): Flow<PagingData<MovieModel>>
 
-    fun getDetailMovie(id: Int): Flow<UIState<DetailMovieModel>>
+    fun getDetailMovie(id: Int): Flow<Result<DetailMovieModel>>
 
-    fun getMovieVideo(id: Int): Flow<UIState<ListMovieVideoModel>>
+    fun getMovieVideo(id: Int): Flow<Result<ListMovieVideoModel>>
 
     fun getMovieReview(id: Int): Flow<PagingData<MovieReviewModel>>
 }

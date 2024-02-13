@@ -4,57 +4,57 @@ import com.google.gson.annotations.SerializedName
 
 data class MovieReviewResponse(
 
-	@field:SerializedName("id")
+	@SerializedName("id")
 	val id: Int,
 
-	@field:SerializedName("page")
+	@SerializedName("page")
 	val page: Int,
 
-	@field:SerializedName("total_pages")
+	@SerializedName("total_pages")
 	val totalPages: Int,
 
-	@field:SerializedName("results")
+	@SerializedName("results")
 	val results: List<MovieReviewResultsItem>,
 
-	@field:SerializedName("total_results")
+	@SerializedName("total_results")
 	val totalResults: Int
 )
 
 data class AuthorDetails(
 
-	@field:SerializedName("avatar_path")
+	@SerializedName("avatar_path")
 	val avatarPath: String,
 
-	@field:SerializedName("name")
+	@SerializedName("name")
 	val name: String,
 
-	@field:SerializedName("rating")
+	@SerializedName("rating")
 	val rating: Double,
 
-	@field:SerializedName("username")
+	@SerializedName("username")
 	val username: String
 )
 
 data class MovieReviewResultsItem(
 
-	@field:SerializedName("author_details")
+	@SerializedName("author_details")
 	val authorDetails: AuthorDetails,
 
-	@field:SerializedName("updated_at")
+	@SerializedName("updated_at")
 	val updatedAt: String,
 
-	@field:SerializedName("author")
+	@SerializedName("author")
 	val author: String,
 
-	@field:SerializedName("created_at")
+	@SerializedName("created_at")
 	val createdAt: String,
 
-	@field:SerializedName("id")
+	@SerializedName("id")
 	val id: String,
 
-	@field:SerializedName("content")
+	@SerializedName("content")
 	val content: String,
 
-	@field:SerializedName("url")
+	@SerializedName("url")
 	val url: String
 )
